@@ -142,7 +142,7 @@
             font-weight: 600;
         }
 
-        /* الصفحة الداخلية بعد الدخول */
+        /* الصفحة الداخلية */
         #main-system {
             display: none;
             width: 100%;
@@ -171,6 +171,16 @@
             cursor: pointer;
             font-weight: 700;
             font-size: 12px;
+        }
+
+        .btn-delete {
+            background: #d90429;
+            color: #fff;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 11px;
         }
 
         .leader-panel {
@@ -205,7 +215,7 @@
 </head>
 <body>
 
-    <!-- الشاشة الخارجية (تسجيل الدخول) - يراها الجميع -->
+    <!-- الشاشة الخارجية (تسجيل الدخول) -->
     <div class="login-card" id="login-screen">
         <div class="subtitle-top">CIA • FEDERAL DATA TERMINAL</div>
         
@@ -218,7 +228,7 @@
 
         <div class="input-group">
             <label>معرف الوكيل / اسم المستخدم (Username)</label>
-            <input type="text" id="login-username" placeholder="مثال: Karlos">
+            <input type="text" id="login-username" placeholder="Name">
         </div>
 
         <div class="input-group">
@@ -235,7 +245,7 @@
         <div class="error-msg" id="error-msg">⚠️ خطأ: اسم المستخدم، كلمة السر، أو الرمز غير صحيح!</div>
     </div>
 
-    <!-- الصفحة الداخلية - محجوبة ولن يراها إلا من يملك البيانات الصحيحة -->
+    <!-- الصفحة الداخلية -->
     <div id="main-system">
         <div class="header-system">
             <div>
@@ -245,10 +255,10 @@
             <button class="btn-logout" onclick="logout()">إنهاء الجلسة وإغلاق النظام</button>
         </div>
 
-        <!-- لوحة التحكم الإدارية (تظهر لك أنت فقط بصفتك المدير) -->
+        <!-- لوحة التحكم الإدارية -->
         <div id="leader-section" class="leader-panel" style="display: none;">
             <h3 style="color:var(--gold-color); margin-top:0;">👑 مركز إدارة التراخيص وتعيين الحسابات (Director Controls)</h3>
-            <p style="font-size:12px; color:#94a3b8;">أنشئ من هنا حسابات للعملاء والضباط لتزويدهم باسم المستخدم، كلمة المرور، ورمز الـ PIN الخاص بكل شخص:</p>
+            <p style="font-size:12px; color:#94a3b8;">أنشئ حسابات للأعضاء وسوف تُحفظ دائمًا في النظام ولن تضيع عند التحديث:</p>
             
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                 <div class="input-group">
@@ -269,22 +279,22 @@
                 </div>
             </div>
 
-            <button class="btn-login" style="background:var(--success-color); color:#fff;" onclick="createAccount()">➕ إنشاء واعتماد الحساب فوراً</button>
+            <button class="btn-login" style="background:var(--success-color); color:#fff;" onclick="createAccount()">➕ إنشاء واعتماد الحساب وحفظه في النظام</button>
 
-            <h4 style="margin-bottom:8px; margin-top:25px; color:var(--gold-color);">📋 قائمة الأعضاء المصرح لهم حالياً بالنظام:</h4>
+            <h4 style="margin-bottom:8px; margin-top:25px; color:var(--gold-color);">📋 قائمة الأعضاء المسجلين دائماً بالسيستم:</h4>
             <div id="users-container"></div>
         </div>
 
-        <!-- المحتوى الداخلي المخصص للأعضاء -->
+        <!-- المحتوى الداخلي -->
         <div style="background: var(--card-bg); padding: 25px; border-radius: 8px; border: 1px solid var(--border-color);">
             <h3 style="margin-top:0; color:#fff;">📂 الأرشيف الوطني للسجلات والتقارير السرية</h3>
-            <p style="font-size: 13px; color: #94a3b8;">تم الاتصال بقواعد البيانات المركزية بنجاح. يمكنك الآن مراجعة التقارير والسجلات المتاحة لمستوى تصريحك.</p>
+            <p style="font-size: 13px; color: #94a3b8;">تم الاتصال بقواعد البيانات المركزية بنجاح. كافة الحسابات المسجلة الآن محفوظة بشكل دائم في ذاكرة النظام.</p>
         </div>
     </div>
 
     <script>
-        // 🔑 قاعدة بيانات الحسابات المعتمدة (تستطيع إضافة حسابك وحسابات الأعضاء هنا)
-        let usersDatabase = {
+        // الحسابات المبدئية في حال لم تكن هناك بيانات سابقة
+        const defaultUsers = {
             "Karlos": {
                 password: "admin",
                 pin: "0000",
@@ -299,13 +309,20 @@
             }
         };
 
+        // تحميل الحسابات المحفوظة مسبقاً من ذاكرة المتصفح الدائمة (localStorage)
+        let usersDatabase = JSON.parse(localStorage.getItem("cia_users_db")) || defaultUsers;
+
+        // حفظ الحسابات في ذاكرة المتصفح
+        function saveDatabase() {
+            localStorage.setItem("cia_users_db", JSON.stringify(usersDatabase));
+        }
+
         function login() {
             const user = document.getElementById("login-username").value.trim();
             const pass = document.getElementById("login-password").value.trim();
             const pin = document.getElementById("login-pin").value.trim();
             const errorMsg = document.getElementById("error-msg");
 
-            // التحقق من صحة مطابقة اسم المستخدم + كلمة السر + الرمز
             if (usersDatabase[user] && 
                 usersDatabase[user].password === pass && 
                 usersDatabase[user].pin === pin) {
@@ -319,7 +336,6 @@
                 const roleDisplay = document.getElementById("current-role-display");
                 roleDisplay.innerText = usersDatabase[user].role;
 
-                // إظهار لوحة التحكم للمدير فقط
                 if (usersDatabase[user].role === "DIRECTOR") {
                     roleDisplay.className = "badge badge-leader";
                     document.getElementById("leader-section").style.display = "block";
@@ -334,7 +350,6 @@
             }
         }
 
-        // إنشاء حساب جديد وتفعيله فوراً
         function createAccount() {
             const user = document.getElementById("new-username").value.trim();
             const id = document.getElementById("new-id").value.trim();
@@ -342,7 +357,7 @@
             const pin = document.getElementById("new-pin").value.trim();
 
             if (!user || !id || !pass || !pin) {
-                return alert("تنبيه: يرجى تعبئة جميع الحقول المطلوبة لإنشاء الحساب!");
+                return alert("تنبيه: يرجى تعبئة جميع الحقول المطلوب لإنشاء الحساب!");
             }
 
             usersDatabase[user] = {
@@ -352,7 +367,10 @@
                 role: "SPECIAL AGENT"
             };
 
-            alert(`تم إنشاء حساب العميل (${user}) بنجاح! يمكنه الآن استخدام بياناته للدخول.`);
+            // حفظ الحساب بشكل دائم
+            saveDatabase();
+
+            alert(`تم إنشاء حساب (${user}) وحفظه في السيستم بنجاح! لن يختفي عند التحديث بعد الآن.`);
             
             document.getElementById("new-username").value = "";
             document.getElementById("new-id").value = "";
@@ -362,7 +380,18 @@
             renderUserList();
         }
 
-        // عرض قائمة الحسابات لدى المدير
+        // حذف حساب من السيستم
+        function deleteAccount(username) {
+            if (username === "Karlos") {
+                return alert("لا يمكنك حذف حساب القيادة الأساسي!");
+            }
+            if (confirm(`هل أنت تأكد من حذف حساب (${username}) من النظام؟`)) {
+                delete usersDatabase[username];
+                saveDatabase();
+                renderUserList();
+            }
+        }
+
         function renderUserList() {
             const container = document.getElementById("users-container");
             container.innerHTML = "";
@@ -376,7 +405,8 @@
                         <b>${user}</b> (${u.id}) - <small style="color:var(--gold-color); font-weight:bold;">${u.role}</small>
                     </div>
                     <div>
-                        <small style="color:#94a3b8;">كلمة السر: <b style="color:#fff;">${u.password}</b> | الرمز: <b style="color:#fff;">${u.pin}</b></small>
+                        <small style="color:#94a3b8; margin-left: 10px;">كلمة السر: <b style="color:#fff;">${u.password}</b> | الرمز: <b style="color:#fff;">${u.pin}</b></small>
+                        ${u.role !== 'DIRECTOR' ? `<button class="btn-delete" onclick="deleteAccount('${user}')">حذف</button>` : ''}
                     </div>
                 `;
                 container.appendChild(div);
