@@ -28,7 +28,6 @@
             min-height: 100vh;
         }
 
-        /* نافذة تسجيل الدخول الخارجية */
         .login-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -95,7 +94,6 @@
             color: var(--accent-color);
             margin-bottom: 5px;
             font-weight: 600;
-            letter-spacing: 0.5px;
         }
 
         .input-group input {
@@ -108,13 +106,6 @@
             box-sizing: border-box;
             font-size: 13px;
             text-align: center;
-            transition: all 0.2s ease;
-        }
-
-        .input-group input:focus {
-            outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 8px rgba(0, 132, 255, 0.3);
         }
 
         .btn-login {
@@ -128,11 +119,7 @@
             font-size: 13px;
             cursor: pointer;
             margin-top: 10px;
-            letter-spacing: 1px;
-            transition: 0.2s;
         }
-
-        .btn-login:hover { opacity: 0.9; }
 
         .error-msg {
             color: var(--danger-color);
@@ -142,7 +129,6 @@
             font-weight: 600;
         }
 
-        /* الصفحة الداخلية */
         #main-system {
             display: none;
             width: 100%;
@@ -170,7 +156,6 @@
             border-radius: 4px;
             cursor: pointer;
             font-weight: 700;
-            font-size: 12px;
         }
 
         .btn-delete {
@@ -211,11 +196,17 @@
             background: var(--accent-color);
         }
         .badge-leader { background: var(--gold-color); color: #000; }
+        
+        .sync-status {
+            font-size: 11px;
+            color: var(--gold-color);
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
 
-    <!-- الشاشة الخارجية (تسجيل الدخول) -->
+    <!-- الشاشة الخارجية -->
     <div class="login-card" id="login-screen">
         <div class="subtitle-top">CIA • FEDERAL DATA TERMINAL</div>
         
@@ -228,20 +219,21 @@
 
         <div class="input-group">
             <label>معرف الوكيل / اسم المستخدم (Username)</label>
-            <input type="text" id="login-username" placeholder="Name">
+            <input type="text" id="login-username" placeholder="Name" autocomplete="off">
         </div>
 
         <div class="input-group">
             <label>كلمة المرور التشفيرية (Passcode)</label>
-            <input type="password" id="login-password" placeholder="••••••••">
+            <input type="password" id="login-password" placeholder="••••••••" autocomplete="new-password">
         </div>
 
         <div class="input-group">
             <label>رمز الأمان التشغيلي (PIN Code)</label>
-            <input type="password" id="login-pin" placeholder="••••">
+            <input type="password" id="login-pin" placeholder="••••" autocomplete="off">
         </div>
 
-        <button class="btn-login" onclick="login()">تسجيل الدخول للمنظومة الفدرالية</button>
+        <button class="btn-login" id="btn-login-action" onclick="login()">تسجيل الدخول للمنظومة الفدرالية</button>
+        <div class="sync-status" id="loading-status">🔄 جاري الاتصال بالسحابة...</div>
         <div class="error-msg" id="error-msg">⚠️ خطأ: اسم المستخدم، كلمة السر، أو الرمز غير صحيح!</div>
     </div>
 
@@ -249,16 +241,16 @@
     <div id="main-system">
         <div class="header-system">
             <div>
-                <h3 style="margin:0; color:var(--gold-color); letter-spacing:1px;">🛡️ CIA COMMAND & INTELLIGENCE CENTER</h3>
-                <small>العميل المستعلم: <span id="current-user-display" style="color:var(--accent-color); font-weight:bold;"></span> | مستوى التصريح: <span id="current-role-display" class="badge"></span></small>
+                <h3 style="margin:0; color:var(--gold-color);">🛡️ CIA COMMAND & INTELLIGENCE CENTER</h3>
+                <small>العميل: <span id="current-user-display" style="color:var(--accent-color); font-weight:bold;"></span> | الرتبة: <span id="current-role-display" class="badge"></span></small>
             </div>
             <button class="btn-logout" onclick="logout()">إنهاء الجلسة وإغلاق النظام</button>
         </div>
 
         <!-- لوحة التحكم الإدارية -->
         <div id="leader-section" class="leader-panel" style="display: none;">
-            <h3 style="color:var(--gold-color); margin-top:0;">👑 مركز إدارة التراخيص وتعيين الحسابات (Director Controls)</h3>
-            <p style="font-size:12px; color:#94a3b8;">أنشئ حسابات للأعضاء وسوف تُحفظ دائمًا في النظام ولن تضيع عند التحديث:</p>
+            <h3 style="color:var(--gold-color); margin-top:0;">👑 مركز إدارة التراخيص وتعيين الحسابات السحابية</h3>
+            <p style="font-size:12px; color:#94a3b8;">أنشئ الحساب مباشرة من هنا وسوف يُرفع أونلاين فوراً ليستطيع العضو الدخول من جهازه الخاص:</p>
             
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                 <div class="input-group">
@@ -275,52 +267,71 @@
                 </div>
                 <div class="input-group">
                     <label>رمز الأمان (PIN Code)</label>
-                    <input type="text" id="new-pin" placeholder="رمز PIN المكون من 4 أرقام...">
+                    <input type="text" id="new-pin" placeholder="رمز PIN من 4 أرقام...">
                 </div>
             </div>
 
-            <button class="btn-login" style="background:var(--success-color); color:#fff;" onclick="createAccount()">➕ إنشاء واعتماد الحساب وحفظه في النظام</button>
+            <button class="btn-login" style="background:var(--success-color); color:#fff;" onclick="createAccount()">➕ حفظ وإضافة الحساب أونلاين فوراً</button>
 
-            <h4 style="margin-bottom:8px; margin-top:25px; color:var(--gold-color);">📋 قائمة الأعضاء المسجلين دائماً بالسيستم:</h4>
+            <h4 style="margin-bottom:8px; margin-top:25px; color:var(--gold-color);">📋 قائمة الحسابات المضافة أونلاين:</h4>
             <div id="users-container"></div>
         </div>
 
         <!-- المحتوى الداخلي -->
         <div style="background: var(--card-bg); padding: 25px; border-radius: 8px; border: 1px solid var(--border-color);">
             <h3 style="margin-top:0; color:#fff;">📂 الأرشيف الوطني للسجلات والتقارير السرية</h3>
-            <p style="font-size: 13px; color: #94a3b8;">تم الاتصال بقواعد البيانات المركزية بنجاح. كافة الحسابات المسجلة الآن محفوظة بشكل دائم في ذاكرة النظام.</p>
+            <p style="font-size: 13px; color: #94a3b8;">تم الربط بالسحابة بنجاح. أي حساب تضيفه من شاشة البرنامج يظهر للجميع فوراً.</p>
         </div>
     </div>
 
     <script>
-        // الحسابات المبدئية في حال لم تكن هناك بيانات سابقة
-        const defaultUsers = {
-            "Karlos": {
-                password: "admin",
-                pin: "0000",
-                id: "CIA-001",
-                role: "DIRECTOR"
-            },
-            "aziz": {
-                password: "1234",
-                pin: "0000",
-                id: "CIA-011",
-                role: "SPECIAL AGENT"
-                    },
-            "Agent_Smith": {
-                password: "123",
-                pin: "8899",
-                id: "CIA-104",
-                role: "SPECIAL AGENT"
-            }
+        const BIN_ID = "66f30a90e41b4d34e43681a2"; 
+        const API_KEY = "$2a$10$R90O.QvF3sSskB72X2.4EuK8S8zC83yG8S2/B69O7d3bI.8c2C4s2"; 
+
+        let usersDatabase = {
+            "m1": { password: "1234", pin: "0000", id: "CIA-001", role: "DIRECTOR" }
         };
 
-        // تحميل الحسابات المحفوظة مسبقاً من ذاكرة المتصفح الدائمة (localStorage)
-        let usersDatabase = JSON.parse(localStorage.getItem("cia_users_db")) || defaultUsers;
+        async function fetchCloudData() {
+            try {
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+                    headers: { "X-Master-Key": API_KEY }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.record && Object.keys(data.record).length > 0) {
+                        usersDatabase = data.record;
+                    }
+                }
+            } catch (e) {
+                console.log("Cloud sync error");
+            }
+            document.getElementById("loading-status").innerText = "✅ متصل بالسحابة الفدرالية";
+            checkAutoLogin();
+        }
 
-        // حفظ الحسابات في ذاكرة المتصفح
-        function saveDatabase() {
-            localStorage.setItem("cia_users_db", JSON.stringify(usersDatabase));
+        async function saveCloudData() {
+            document.getElementById("loading-status").innerText = "⏳ جاري رفع الحساب للسحابة...";
+            try {
+                await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-Master-Key": API_KEY
+                    },
+                    body: JSON.stringify(usersDatabase)
+                });
+                document.getElementById("loading-status").innerText = "✅ تم حفظ الحساب أونلاين بنجاح!";
+            } catch (e) {
+                alert("حدث خطأ أثناء الاتصال بالسحابة!");
+            }
+        }
+
+        function checkAutoLogin() {
+            const savedUser = localStorage.getItem("active_cia_user");
+            if (savedUser && usersDatabase[savedUser]) {
+                openMainSystem(savedUser);
+            }
         }
 
         function login() {
@@ -334,36 +345,40 @@
                 usersDatabase[user].pin === pin) {
                 
                 errorMsg.style.display = "none";
-                document.getElementById("login-screen").style.display = "none";
-                document.getElementById("main-system").style.display = "block";
-                
-                document.getElementById("current-user-display").innerText = `${user} [${usersDatabase[user].id}]`;
-                
-                const roleDisplay = document.getElementById("current-role-display");
-                roleDisplay.innerText = usersDatabase[user].role;
-
-                if (usersDatabase[user].role === "DIRECTOR") {
-                    roleDisplay.className = "badge badge-leader";
-                    document.getElementById("leader-section").style.display = "block";
-                    renderUserList();
-                } else {
-                    roleDisplay.className = "badge";
-                    document.getElementById("leader-section").style.display = "none";
-                }
-
+                localStorage.setItem("active_cia_user", user);
+                openMainSystem(user);
             } else {
                 errorMsg.style.display = "block";
             }
         }
 
-        function createAccount() {
+        function openMainSystem(user) {
+            document.getElementById("login-screen").style.display = "none";
+            document.getElementById("main-system").style.display = "block";
+            
+            document.getElementById("current-user-display").innerText = `${user} [${usersDatabase[user].id}]`;
+            
+            const roleDisplay = document.getElementById("current-role-display");
+            roleDisplay.innerText = usersDatabase[user].role;
+
+            if (usersDatabase[user].role === "DIRECTOR") {
+                roleDisplay.className = "badge badge-leader";
+                document.getElementById("leader-section").style.display = "block";
+                renderUserList();
+            } else {
+                roleDisplay.className = "badge";
+                document.getElementById("leader-section").style.display = "none";
+            }
+        }
+
+        async function createAccount() {
             const user = document.getElementById("new-username").value.trim();
             const id = document.getElementById("new-id").value.trim();
             const pass = document.getElementById("new-password").value.trim();
             const pin = document.getElementById("new-pin").value.trim();
 
             if (!user || !id || !pass || !pin) {
-                return alert("تنبيه: يرجى تعبئة جميع الحقول المطلوب لإنشاء الحساب!");
+                return alert("تنبيه: يرجى تعبئة كافة الحقول!");
             }
 
             usersDatabase[user] = {
@@ -373,28 +388,23 @@
                 role: "SPECIAL AGENT"
             };
 
-            // حفظ الحساب بشكل دائم
-            saveDatabase();
+            renderUserList();
+            await saveCloudData();
 
-            alert(`تم إنشاء حساب (${user}) وحفظه في السيستم بنجاح! لن يختفي عند التحديث بعد الآن.`);
+            alert(`تم إضافة حساب (${user}) بنجاح! يستطيع الآن تسجيل الدخول فوراً من جهازه.`);
             
             document.getElementById("new-username").value = "";
             document.getElementById("new-id").value = "";
             document.getElementById("new-password").value = "";
             document.getElementById("new-pin").value = "";
-
-            renderUserList();
         }
 
-        // حذف حساب من السيستم
-        function deleteAccount(username) {
-            if (username === "Karlos") {
-                return alert("لا يمكنك حذف حساب القيادة الأساسي!");
-            }
-            if (confirm(`هل أنت تأكد من حذف حساب (${username}) من النظام؟`)) {
+        async function deleteAccount(username) {
+            if (username === "Karlos") return alert("لا يمكنك حذف مدير النظام!");
+            if (confirm(`حذف حساب (${username}) من السحابة؟`)) {
                 delete usersDatabase[username];
-                saveDatabase();
                 renderUserList();
+                await saveCloudData();
             }
         }
 
@@ -411,7 +421,7 @@
                         <b>${user}</b> (${u.id}) - <small style="color:var(--gold-color); font-weight:bold;">${u.role}</small>
                     </div>
                     <div>
-                        <small style="color:#94a3b8; margin-left: 10px;">كلمة السر: <b style="color:#fff;">${u.password}</b> | الرمز: <b style="color:#fff;">${u.pin}</b></small>
+                        <small style="color:#94a3b8; margin-left: 10px;">كلمة السر: <b style="color:#fff;">${u.password}</b> | PIN: <b style="color:#fff;">${u.pin}</b></small>
                         ${u.role !== 'DIRECTOR' ? `<button class="btn-delete" onclick="deleteAccount('${user}')">حذف</button>` : ''}
                     </div>
                 `;
@@ -420,12 +430,15 @@
         }
 
         function logout() {
+            localStorage.removeItem("active_cia_user");
             document.getElementById("login-screen").style.display = "block";
             document.getElementById("main-system").style.display = "none";
             document.getElementById("login-username").value = "";
             document.getElementById("login-password").value = "";
             document.getElementById("login-pin").value = "";
         }
+
+        fetchCloudData();
     </script>
 </body>
 </html>
