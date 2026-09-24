@@ -199,7 +199,7 @@
         
         .sync-status {
             font-size: 11px;
-            color: var(--gold-color);
+            color: var(--success-color);
             margin-top: 5px;
         }
     </style>
@@ -219,7 +219,7 @@
 
         <div class="input-group">
             <label>معرف الوكيل / اسم المستخدم (Username)</label>
-            <input type="text" id="login-username" placeholder="Name" autocomplete="off">
+            <input type="text" id="login-username" placeholder="مثال: Karlos" autocomplete="off">
         </div>
 
         <div class="input-group">
@@ -233,7 +233,7 @@
         </div>
 
         <button class="btn-login" id="btn-login-action" onclick="login()">تسجيل الدخول للمنظومة الفدرالية</button>
-        <div class="sync-status" id="loading-status">🔄 جاري الاتصال بالسحابة...</div>
+        <div class="sync-status" id="loading-status">✅ النظام جاهز ومحفوظ تلقائياً</div>
         <div class="error-msg" id="error-msg">⚠️ خطأ: اسم المستخدم، كلمة السر، أو الرمز غير صحيح!</div>
     </div>
 
@@ -249,8 +249,8 @@
 
         <!-- لوحة التحكم الإدارية -->
         <div id="leader-section" class="leader-panel" style="display: none;">
-            <h3 style="color:var(--gold-color); margin-top:0;">👑 مركز إدارة التراخيص وتعيين الحسابات السحابية</h3>
-            <p style="font-size:12px; color:#94a3b8;">أنشئ الحساب مباشرة من هنا وسوف يُرفع أونلاين فوراً ليستطيع العضو الدخول من جهازه الخاص:</p>
+            <h3 style="color:var(--gold-color); margin-top:0;">👑 مركز إدارة التراخيص وتعيين الحسابات</h3>
+            <p style="font-size:12px; color:#94a3b8;">أنشئ الحساب وسوف يُحفظ نهائياً ولن يختفي حتى لو قمت بعمل Refresh للصفحة:</p>
             
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                 <div class="input-group">
@@ -271,67 +271,28 @@
                 </div>
             </div>
 
-            <button class="btn-login" style="background:var(--success-color); color:#fff;" onclick="createAccount()">➕ حفظ وإضافة الحساب أونلاين فوراً</button>
+            <button class="btn-login" style="background:var(--success-color); color:#fff;" onclick="createAccount()">➕ حفظ وإضافة الحساب نهائياً</button>
 
-            <h4 style="margin-bottom:8px; margin-top:25px; color:var(--gold-color);">📋 قائمة الحسابات المضافة أونلاين:</h4>
+            <h4 style="margin-bottom:8px; margin-top:25px; color:var(--gold-color);">📋 قائمة الحسابات المحفوظة:</h4>
             <div id="users-container"></div>
         </div>
 
         <!-- المحتوى الداخلي -->
         <div style="background: var(--card-bg); padding: 25px; border-radius: 8px; border: 1px solid var(--border-color);">
             <h3 style="margin-top:0; color:#fff;">📂 الأرشيف الوطني للسجلات والتقارير السرية</h3>
-            <p style="font-size: 13px; color: #94a3b8;">تم الربط بالسحابة بنجاح. أي حساب تضيفه من شاشة البرنامج يظهر للجميع فوراً.</p>
+            <p style="font-size: 13px; color: #94a3b8;">تم الحفظ بنجاح. أي حساب تضيفه سيظل ثابتاً ومحفوظاً بشكل دائم.</p>
         </div>
     </div>
 
     <script>
-        const BIN_ID = "66f30a90e41b4d34e43681a2"; 
-        const API_KEY = "$2a$10$R90O.QvF3sSskB72X2.4EuK8S8zC83yG8S2/B69O7d3bI.8c2C4s2"; 
-
-        let usersDatabase = {
+        const defaultUsers = {
             "m1": { password: "1234", pin: "0000", id: "CIA-001", role: "DIRECTOR" }
         };
 
-        async function fetchCloudData() {
-            try {
-                const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-                    headers: { "X-Master-Key": API_KEY }
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data.record && Object.keys(data.record).length > 0) {
-                        usersDatabase = data.record;
-                    }
-                }
-            } catch (e) {
-                console.log("Cloud sync error");
-            }
-            document.getElementById("loading-status").innerText = "✅ متصل بالسحابة الفدرالية";
-            checkAutoLogin();
-        }
+        let usersDatabase = JSON.parse(localStorage.getItem("cia_users_db")) || defaultUsers;
 
-        async function saveCloudData() {
-            document.getElementById("loading-status").innerText = "⏳ جاري رفع الحساب للسحابة...";
-            try {
-                await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-Master-Key": API_KEY
-                    },
-                    body: JSON.stringify(usersDatabase)
-                });
-                document.getElementById("loading-status").innerText = "✅ تم حفظ الحساب أونلاين بنجاح!";
-            } catch (e) {
-                alert("حدث خطأ أثناء الاتصال بالسحابة!");
-            }
-        }
-
-        function checkAutoLogin() {
-            const savedUser = localStorage.getItem("active_cia_user");
-            if (savedUser && usersDatabase[savedUser]) {
-                openMainSystem(savedUser);
-            }
+        function saveToLocal() {
+            localStorage.setItem("cia_users_db", JSON.stringify(usersDatabase));
         }
 
         function login() {
@@ -345,7 +306,6 @@
                 usersDatabase[user].pin === pin) {
                 
                 errorMsg.style.display = "none";
-                localStorage.setItem("active_cia_user", user);
                 openMainSystem(user);
             } else {
                 errorMsg.style.display = "block";
@@ -371,7 +331,7 @@
             }
         }
 
-        async function createAccount() {
+        function createAccount() {
             const user = document.getElementById("new-username").value.trim();
             const id = document.getElementById("new-id").value.trim();
             const pass = document.getElementById("new-password").value.trim();
@@ -388,10 +348,10 @@
                 role: "SPECIAL AGENT"
             };
 
+            saveToLocal();
             renderUserList();
-            await saveCloudData();
 
-            alert(`تم إضافة حساب (${user}) بنجاح! يستطيع الآن تسجيل الدخول فوراً من جهازه.`);
+            alert(`تم حفظ حساب (${user}) بنجاح ولن ينحذف عند الـ Refresh!`);
             
             document.getElementById("new-username").value = "";
             document.getElementById("new-id").value = "";
@@ -399,12 +359,12 @@
             document.getElementById("new-pin").value = "";
         }
 
-        async function deleteAccount(username) {
+        function deleteAccount(username) {
             if (username === "Karlos") return alert("لا يمكنك حذف مدير النظام!");
-            if (confirm(`حذف حساب (${username}) من السحابة؟`)) {
+            if (confirm(`هل أنت تأكد من حذف حساب (${username})؟`)) {
                 delete usersDatabase[username];
+                saveToLocal();
                 renderUserList();
-                await saveCloudData();
             }
         }
 
@@ -430,15 +390,12 @@
         }
 
         function logout() {
-            localStorage.removeItem("active_cia_user");
             document.getElementById("login-screen").style.display = "block";
             document.getElementById("main-system").style.display = "none";
             document.getElementById("login-username").value = "";
             document.getElementById("login-password").value = "";
             document.getElementById("login-pin").value = "";
         }
-
-        fetchCloudData();
     </script>
 </body>
 </html>
