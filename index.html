@@ -85,7 +85,7 @@
 
     <div class="header">
         <div>
-            <h2>🛡️ نظام التحقيقات الجنائية (MDT) - FiveM</h2>
+            <h2>🛡️ نظام التحقيقات الجنائية (MDT) </h2>
             <small>نظام الاستخبارات والسجلات الموحد</small>
         </div>
         <div>
@@ -122,32 +122,6 @@
             </div>
         </div>
 
-        <!-- الشريط الجانبي: حاسبة العقوبات -->
-        <div>
-            <div class="card">
-                <h3>⚖️ حاسبة العقوبات والغرامات</h3>
-                <p>حدد التهم الموجهة للمشتبه به:</p>
-                
-                <label class="charge-option">
-                    <input type="checkbox" class="charge" data-months="10" data-fine="5000" onchange="calculateFine()"> سرقة متجر (10 أشهر | $5000)
-                </label>
-                <label class="charge-option">
-                    <input type="checkbox" class="charge" data-months="20" data-fine="15000" onchange="calculateFine()"> الاعتداء على رجل أمن (20 شهر | $15000)
-                </label>
-                <label class="charge-option">
-                    <input type="checkbox" class="charge" data-months="40" data-fine="50000" onchange="calculateFine()"> سرقة البنك المركزي (40 شهر | $50000)
-                </label>
-                <label class="charge-option">
-                    <input type="checkbox" class="charge" data-months="15" data-fine="10000" onchange="calculateFine()"> حيازة سلاح غير ترخيص (15 شهر | $10000)
-                </label>
-
-                <div class="total-box">
-                    <div>إجمالي السجن: <b id="total-months">0</b> شهر</div>
-                    <div>إجمالي الغرامة: <b id="total-fine" style="color: #4caf50;">$0</b></div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <script src="app.js"></script>
 </body>
