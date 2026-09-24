@@ -1,1 +1,154 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام التحقيقات الفدرالي - FiveM MDT</title>
+    <style>
+        :root {
+            --bg-color: #0b0e14;
+            --card-bg: #151a23;
+            --accent-color: #0078ff;
+            --danger-color: #e63946;
+            --text-color: #e0e6ed;
+            --border-color: #232d3f;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 15px 25px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+        .main-container {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 20px;
+        }
+        .card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+        h2, h3 { color: #fff; margin-top: 0; }
+        .badge {
+            background: var(--accent-color);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .badge-admin { background: var(--danger-color); }
+        .charge-option {
+            display: block;
+            margin: 8px 0;
+            cursor: pointer;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            background: #0f131a;
+            border: 1px solid var(--border-color);
+            color: #fff;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background: var(--accent-color);
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover { opacity: 0.8; }
+        .total-box {
+            background: #0f131a;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            border-right: 4px solid var(--accent-color);
+        }
+    </style>
+</head>
+<body>
 
+    <div class="header">
+        <div>
+            <h2>🛡️ نظام التحقيقات الجنائية (MDT) - FiveM</h2>
+            <small>نظام الاستخبارات والسجلات الموحد</small>
+        </div>
+        <div>
+            المستخدم: <span id="user-name">جاري التحميل...</span> 
+            <span id="user-role" class="badge">Z-00</span>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <!-- القسم الرئيسي -->
+        <div>
+            <!-- لوحة التحكم للأدمن (Leader) فقط -->
+            <div id="admin-panel" class="card" style="display: none; border-color: var(--danger-color);">
+                <h3>👑 لوحة تحكم الليدر (إدارة الأعضاء)</h3>
+                <p>صلاحيات الحساب: <b style="color: var(--danger-color);">ADMIN / LEADER</b></p>
+                <div id="users-list">
+                    <p>جاري جلب قائمة الحسابات والمعلقين...</p>
+                </div>
+            </div>
+
+            <!-- السجل الجنائي -->
+            <div class="card">
+                <h3>📂 السجل الجنائي للمواطنين</h3>
+                <input type="text" id="search-id" placeholder="ادخل رقم الهوية (Citizen ID) أو اسم المواطن...">
+                <button onclick="searchCitizen()">بحث في الأرشيف</button>
+            </div>
+
+            <!-- قائمة المطلوبين -->
+            <div class="card">
+                <h3>🚨 قائمة المطلوبين (WANTED)</h3>
+                <div id="wanted-list">
+                    <p>لا يوجد مطلوبين حالياً.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- الشريط الجانبي: حاسبة العقوبات -->
+        <div>
+            <div class="card">
+                <h3>⚖️ حاسبة العقوبات والغرامات</h3>
+                <p>حدد التهم الموجهة للمشتبه به:</p>
+                
+                <label class="charge-option">
+                    <input type="checkbox" class="charge" data-months="10" data-fine="5000" onchange="calculateFine()"> سرقة متجر (10 أشهر | $5000)
+                </label>
+                <label class="charge-option">
+                    <input type="checkbox" class="charge" data-months="20" data-fine="15000" onchange="calculateFine()"> الاعتداء على رجل أمن (20 شهر | $15000)
+                </label>
+                <label class="charge-option">
+                    <input type="checkbox" class="charge" data-months="40" data-fine="50000" onchange="calculateFine()"> سرقة البنك المركزي (40 شهر | $50000)
+                </label>
+                <label class="charge-option">
+                    <input type="checkbox" class="charge" data-months="15" data-fine="10000" onchange="calculateFine()"> حيازة سلاح غير ترخيص (15 شهر | $10000)
+                </label>
+
+                <div class="total-box">
+                    <div>إجمالي السجن: <b id="total-months">0</b> شهر</div>
+                    <div>إجمالي الغرامة: <b id="total-fine" style="color: #4caf50;">$0</b></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
