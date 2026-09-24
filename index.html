@@ -3,126 +3,393 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام التحقيقات الفدرالي - FiveM MDT</title>
+    <title>CIA FEDERAL DATA TERMINAL | بوابة التشفير والاستخبارات</title>
     <style>
         :root {
-            --bg-color: #0b0e14;
-            --card-bg: #151a23;
-            --accent-color: #0078ff;
-            --danger-color: #e63946;
-            --text-color: #e0e6ed;
-            --border-color: #232d3f;
+            --bg-color: #05080c;
+            --card-bg: #0b1017;
+            --accent-color: #0084ff;
+            --border-color: #162235;
+            --text-color: #d1d9e6;
+            --danger-color: #d90429;
+            --gold-color: #c5a059;
+            --success-color: #10b981;
         }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
-        .header {
+
+        /* نافذة تسجيل الدخول الخارجية */
+        .login-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 35px 30px;
+            width: 100%;
+            max-width: 410px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.85);
+        }
+
+        .subtitle-top {
+            font-size: 10px;
+            letter-spacing: 2.5px;
+            color: #64748b;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .logo-container {
+            width: 95px;
+            height: 95px;
+            margin: 0 auto 15px auto;
+            border-radius: 50%;
+            border: 2px solid var(--gold-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+            box-shadow: 0 0 20px rgba(197, 160, 89, 0.25);
+        }
+
+        .logo-container img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+        }
+
+        .title {
+            color: var(--gold-color);
+            font-size: 22px;
+            font-weight: 800;
+            margin: 5px 0 0 0;
+            letter-spacing: 1.5px;
+        }
+
+        .agency-name {
+            color: #64748b;
+            font-size: 10px;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .input-group {
+            text-align: right;
+            margin-bottom: 14px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 11px;
+            color: var(--accent-color);
+            margin-bottom: 5px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 11px;
+            background: #04060a;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            color: #fff;
+            box-sizing: border-box;
+            font-size: 13px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 8px rgba(0, 132, 255, 0.3);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent-color);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            margin-top: 10px;
+            letter-spacing: 1px;
+            transition: 0.2s;
+        }
+
+        .btn-login:hover { opacity: 0.9; }
+
+        .error-msg {
+            color: var(--danger-color);
+            font-size: 12px;
+            margin-top: 12px;
+            display: none;
+            font-weight: 600;
+        }
+
+        /* الصفحة الداخلية بعد الدخول */
+        #main-system {
+            display: none;
+            width: 100%;
+            max-width: 1000px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .header-system {
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: var(--card-bg);
-            padding: 15px 25px;
+            padding: 18px 25px;
             border-radius: 8px;
             border: 1px solid var(--border-color);
             margin-bottom: 20px;
         }
-        .main-container {
-            display: grid;
-            grid-template-columns: 3fr 1fr;
-            gap: 20px;
-        }
-        .card {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 20px;
-        }
-        h2, h3 { color: #fff; margin-top: 0; }
-        .badge {
-            background: var(--accent-color);
-            padding: 4px 8px;
+
+        .btn-logout {
+            background: var(--danger-color);
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
             border-radius: 4px;
+            cursor: pointer;
+            font-weight: 700;
             font-size: 12px;
         }
-        .badge-admin { background: var(--danger-color); }
-        .charge-option {
-            display: block;
-            margin: 8px 0;
-            cursor: pointer;
+
+        .leader-panel {
+            background: #0a0e16;
+            border: 1px solid var(--gold-color);
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
         }
-        input, select, button {
-            width: 100%;
-            padding: 10px;
-            margin-top: 8px;
-            background: #0f131a;
+
+        .user-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #04060a;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 5px;
             border: 1px solid var(--border-color);
-            color: #fff;
-            border-radius: 5px;
-            box-sizing: border-box;
+            font-size: 13px;
         }
-        button {
+
+        .badge {
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 700;
             background: var(--accent-color);
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
         }
-        button:hover { opacity: 0.8; }
-        .total-box {
-            background: #0f131a;
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 15px;
-            border-right: 4px solid var(--accent-color);
-        }
+        .badge-leader { background: var(--gold-color); color: #000; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div>
-            <h2>🛡️ نظام التحقيقات الجنائية (MDT) </h2>
-            <small>نظام الاستخبارات والسجلات الموحد</small>
+    <!-- الشاشة الخارجية (تسجيل الدخول) - يراها الجميع -->
+    <div class="login-card" id="login-screen">
+        <div class="subtitle-top">CIA • FEDERAL DATA TERMINAL</div>
+        
+        <div class="logo-container">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/25/Seal_of_the_Central_Intelligence_Agency.svg" alt="CIA Emblem">
         </div>
-        <div>
-            المستخدم: <span id="user-name">جاري التحميل...</span> 
-            <span id="user-role" class="badge">Z-00</span>
+
+        <div class="title">CIA FEDERAL SYSTEM</div>
+        <div class="agency-name">CENTRAL INTELLIGENCE AGENCY</div>
+
+        <div class="input-group">
+            <label>معرف الوكيل / اسم المستخدم (Username)</label>
+            <input type="text" id="login-username" placeholder="مثال: Karlos">
+        </div>
+
+        <div class="input-group">
+            <label>كلمة المرور التشفيرية (Passcode)</label>
+            <input type="password" id="login-password" placeholder="••••••••">
+        </div>
+
+        <div class="input-group">
+            <label>رمز الأمان التشغيلي (PIN Code)</label>
+            <input type="password" id="login-pin" placeholder="••••">
+        </div>
+
+        <button class="btn-login" onclick="login()">تسجيل الدخول للمنظومة الفدرالية</button>
+        <div class="error-msg" id="error-msg">⚠️ خطأ: اسم المستخدم، كلمة السر، أو الرمز غير صحيح!</div>
+    </div>
+
+    <!-- الصفحة الداخلية - محجوبة ولن يراها إلا من يملك البيانات الصحيحة -->
+    <div id="main-system">
+        <div class="header-system">
+            <div>
+                <h3 style="margin:0; color:var(--gold-color); letter-spacing:1px;">🛡️ CIA COMMAND & INTELLIGENCE CENTER</h3>
+                <small>العميل المستعلم: <span id="current-user-display" style="color:var(--accent-color); font-weight:bold;"></span> | مستوى التصريح: <span id="current-role-display" class="badge"></span></small>
+            </div>
+            <button class="btn-logout" onclick="logout()">إنهاء الجلسة وإغلاق النظام</button>
+        </div>
+
+        <!-- لوحة التحكم الإدارية (تظهر لك أنت فقط بصفتك المدير) -->
+        <div id="leader-section" class="leader-panel" style="display: none;">
+            <h3 style="color:var(--gold-color); margin-top:0;">👑 مركز إدارة التراخيص وتعيين الحسابات (Director Controls)</h3>
+            <p style="font-size:12px; color:#94a3b8;">أنشئ من هنا حسابات للعملاء والضباط لتزويدهم باسم المستخدم، كلمة المرور، ورمز الـ PIN الخاص بكل شخص:</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div class="input-group">
+                    <label>اسم الوكيل (Username)</label>
+                    <input type="text" id="new-username" placeholder="اسم العميل...">
+                </div>
+                <div class="input-group">
+                    <label>المعرف الفدرالي (Badge ID)</label>
+                    <input type="text" id="new-id" placeholder="مثال: CIA-709">
+                </div>
+                <div class="input-group">
+                    <label>كلمة المرور (Passcode)</label>
+                    <input type="text" id="new-password" placeholder="كلمة المرور...">
+                </div>
+                <div class="input-group">
+                    <label>رمز الأمان (PIN Code)</label>
+                    <input type="text" id="new-pin" placeholder="رمز PIN المكون من 4 أرقام...">
+                </div>
+            </div>
+
+            <button class="btn-login" style="background:var(--success-color); color:#fff;" onclick="createAccount()">➕ إنشاء واعتماد الحساب فوراً</button>
+
+            <h4 style="margin-bottom:8px; margin-top:25px; color:var(--gold-color);">📋 قائمة الأعضاء المصرح لهم حالياً بالنظام:</h4>
+            <div id="users-container"></div>
+        </div>
+
+        <!-- المحتوى الداخلي المخصص للأعضاء -->
+        <div style="background: var(--card-bg); padding: 25px; border-radius: 8px; border: 1px solid var(--border-color);">
+            <h3 style="margin-top:0; color:#fff;">📂 الأرشيف الوطني للسجلات والتقارير السرية</h3>
+            <p style="font-size: 13px; color: #94a3b8;">تم الاتصال بقواعد البيانات المركزية بنجاح. يمكنك الآن مراجعة التقارير والسجلات المتاحة لمستوى تصريحك.</p>
         </div>
     </div>
 
-    <div class="main-container">
-        <!-- القسم الرئيسي -->
-        <div>
-            <!-- لوحة التحكم للأدمن (Leader) فقط -->
-            <div id="admin-panel" class="card" style="display: none; border-color: var(--danger-color);">
-                <h3>👑 لوحة تحكم الليدر (إدارة الأعضاء)</h3>
-                <p>صلاحيات الحساب: <b style="color: var(--danger-color);">ADMIN / LEADER</b></p>
-                <div id="users-list">
-                    <p>جاري جلب قائمة الحسابات والمعلقين...</p>
-                </div>
-            </div>
+    <script>
+        // 🔑 قاعدة بيانات الحسابات المعتمدة (تستطيع إضافة حسابك وحسابات الأعضاء هنا)
+        let usersDatabase = {
+            "Karlos": {
+                password: "admin",
+                pin: "0000",
+                id: "CIA-001",
+                role: "DIRECTOR"
+            },
+            "Agent_Smith": {
+                password: "123",
+                pin: "8899",
+                id: "CIA-104",
+                role: "SPECIAL AGENT"
+            }
+        };
 
-            <!-- السجل الجنائي -->
-            <div class="card">
-                <h3>📂 السجل الجنائي للمواطنين</h3>
-                <input type="text" id="search-id" placeholder="ادخل رقم الهوية (Citizen ID) أو اسم المواطن...">
-                <button onclick="searchCitizen()">بحث في الأرشيف</button>
-            </div>
+        function login() {
+            const user = document.getElementById("login-username").value.trim();
+            const pass = document.getElementById("login-password").value.trim();
+            const pin = document.getElementById("login-pin").value.trim();
+            const errorMsg = document.getElementById("error-msg");
 
-            <!-- قائمة المطلوبين -->
-            <div class="card">
-                <h3>🚨 قائمة المطلوبين (WANTED)</h3>
-                <div id="wanted-list">
-                    <p>لا يوجد مطلوبين حالياً.</p>
-                </div>
-            </div>
-        </div>
+            // التحقق من صحة مطابقة اسم المستخدم + كلمة السر + الرمز
+            if (usersDatabase[user] && 
+                usersDatabase[user].password === pass && 
+                usersDatabase[user].pin === pin) {
+                
+                errorMsg.style.display = "none";
+                document.getElementById("login-screen").style.display = "none";
+                document.getElementById("main-system").style.display = "block";
+                
+                document.getElementById("current-user-display").innerText = `${user} [${usersDatabase[user].id}]`;
+                
+                const roleDisplay = document.getElementById("current-role-display");
+                roleDisplay.innerText = usersDatabase[user].role;
 
+                // إظهار لوحة التحكم للمدير فقط
+                if (usersDatabase[user].role === "DIRECTOR") {
+                    roleDisplay.className = "badge badge-leader";
+                    document.getElementById("leader-section").style.display = "block";
+                    renderUserList();
+                } else {
+                    roleDisplay.className = "badge";
+                    document.getElementById("leader-section").style.display = "none";
+                }
 
-    <script src="app.js"></script>
+            } else {
+                errorMsg.style.display = "block";
+            }
+        }
+
+        // إنشاء حساب جديد وتفعيله فوراً
+        function createAccount() {
+            const user = document.getElementById("new-username").value.trim();
+            const id = document.getElementById("new-id").value.trim();
+            const pass = document.getElementById("new-password").value.trim();
+            const pin = document.getElementById("new-pin").value.trim();
+
+            if (!user || !id || !pass || !pin) {
+                return alert("تنبيه: يرجى تعبئة جميع الحقول المطلوبة لإنشاء الحساب!");
+            }
+
+            usersDatabase[user] = {
+                password: pass,
+                pin: pin,
+                id: id,
+                role: "SPECIAL AGENT"
+            };
+
+            alert(`تم إنشاء حساب العميل (${user}) بنجاح! يمكنه الآن استخدام بياناته للدخول.`);
+            
+            document.getElementById("new-username").value = "";
+            document.getElementById("new-id").value = "";
+            document.getElementById("new-password").value = "";
+            document.getElementById("new-pin").value = "";
+
+            renderUserList();
+        }
+
+        // عرض قائمة الحسابات لدى المدير
+        function renderUserList() {
+            const container = document.getElementById("users-container");
+            container.innerHTML = "";
+
+            for (let user in usersDatabase) {
+                const u = usersDatabase[user];
+                const div = document.createElement("div");
+                div.className = "user-list-item";
+                div.innerHTML = `
+                    <div>
+                        <b>${user}</b> (${u.id}) - <small style="color:var(--gold-color); font-weight:bold;">${u.role}</small>
+                    </div>
+                    <div>
+                        <small style="color:#94a3b8;">كلمة السر: <b style="color:#fff;">${u.password}</b> | الرمز: <b style="color:#fff;">${u.pin}</b></small>
+                    </div>
+                `;
+                container.appendChild(div);
+            }
+        }
+
+        function logout() {
+            document.getElementById("login-screen").style.display = "block";
+            document.getElementById("main-system").style.display = "none";
+            document.getElementById("login-username").value = "";
+            document.getElementById("login-password").value = "";
+            document.getElementById("login-pin").value = "";
+        }
+    </script>
 </body>
 </html>
