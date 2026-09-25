@@ -405,7 +405,7 @@
             <input type="password" id="login-pin" placeholder="••••" autocomplete="off">
         </div>
         <button class="btn-login" onclick="login()">تسجيل الدخول للمنظومة الفدرالية</button>
-        <div class="sync-status" id="loading-status">🔄 جاري الاتصال بالسحابة...</div>
+        <div class="sync-status" id="loading-status">🔄 جاري الاتصال بالفايربيس...</div>
         <div class="error-msg" id="error-msg">⚠️ خطأ: اسم المستخدم، كلمة السر، أو الرمز غير صحيح!</div>
     </div>
     <!-- 2. النظام الداخلي -->
@@ -484,7 +484,6 @@
             <div class="input-group">
                 <input type="text" id="reportSearch" class="search-box" placeholder="🔍 بحث في قاعدة بيانات التقارير..." oninput="renderReports()">
             </div>
-
             <div class="input-group"><label>عنوان التقرير</label><input type="text" id="reportTitle" placeholder="عنوان التقرير..."></div>
             <div class="input-group"><label>تفاصيل التقرير</label><textarea id="reportDetails" rows="3" placeholder="تفاصيل التقرير..."></textarea></div>
             <div class="input-group"><label>Citizen ID المرتبط بالتقرير</label><input type="text" id="reportCitizen" placeholder="مثال: CIA-102"></div>
@@ -517,7 +516,6 @@
             <div class="input-group">
                 <input type="text" id="wantedSearch" class="search-box" placeholder="🔍 بحث في داتابيس المطلوبين..." oninput="renderWanted()">
             </div>
-
             <div style="background:#04060a; padding:15px; border-radius:6px; margin-bottom:15px; border:1px solid var(--border-color);">
                 <div class="input-group"><label>اسم المطلوب</label><input type="text" id="wantedName" placeholder="Name..."></div>
                 <div class="input-group"><label>مستوى الخطورة</label><input type="text" id="wantedRisk" placeholder="مثال: خطر جداً"></div>
@@ -534,7 +532,6 @@
             <div class="input-group">
                 <input type="text" id="recordsSearch" class="search-box" placeholder="🔍 بحث في السجل الجنائي للأشخاص..." oninput="renderRecords()">
             </div>
-
             <div style="background:#04060a; padding:15px; border-radius:6px; margin-bottom:15px; border:1px solid var(--border-color);">
                 <div class="input-group"><label>اسم المواطن</label><input type="text" id="recName" placeholder="John Doe"></div>
                 <div class="input-group"><label>Citizen ID</label><input type="text" id="recId" placeholder="CIA-102"></div>
@@ -551,7 +548,6 @@
             <div class="input-group">
                 <input type="text" id="gangsSearch" class="search-box" placeholder="🔍 بحث في مخططات الاستخبارات والعصابات..." oninput="renderGangs()">
             </div>
-
             <div style="background:#04060a; padding:15px; border-radius:6px; margin-bottom:15px; border:1px solid var(--border-color);">
                 <div class="input-group"><label>اسم العصابة / التنظيم</label><input type="text" id="gangName" placeholder="Gang Name..."></div>
                 <div class="input-group"><label>تفاصيل المخطط والارتباطات</label><textarea id="gangDetails" rows="2" placeholder="التفاصيل..."></textarea></div>
@@ -584,59 +580,76 @@
             </table>
         </div>
     </div>
-    <!-- 3. البرمجة والتكامل السحابي الحقيقي -->
+
+    <!-- 3. البرمجة والتكامل السحابي عبر Firebase Firestore -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+      import { 
+        getFirestore, 
+        doc, 
+        setDoc, 
+        getDoc, 
+        onSnapshot 
+      } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyA-beJLIumvemTm53OjjIPFC7cvYMGrNcc",
+        authDomain: "cia1-d5a55.firebaseapp.com",
+        projectId: "cia1-d5a55",
+        storageBucket: "cia1-d5a55.firebasestorage.app",
+        messagingSenderId: "415185058248",
+        appId: "1:415185058248:web:92b9145c4562101491e8fd",
+        measurementId: "G-JK7PBVJ2PY"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      let defaultDatabase = {
+          users: {
+              "Karlos": { password: "admin", pin: "0000", id: "CIA-001", role: "DIRECTOR" },
+              "Mutleq": { password: "123", pin: "1234", id: "CIA-102", role: "CID Member" }
+          },
+          reports: [],
+          wanted: [
+              { id: 1, name: "MARK", risk: "خطر جداً", crime: "التهمة مطلوب وبشكل خطر على القطاعات الفدرالية..." }
+          ],
+          records: [],
+          gangs: [],
+          logs: ["[SYSTEM READY]: تم الاتصال بالسحابة الفدرالية."]
+      };
+
+      window.globalDatabase = defaultDatabase;
+      window.currentUser = "";
+
+      // حفظ السحابة عبر الفايربيس
+      window.saveCloudData = async function() {
+          try {
+              await setDoc(doc(db, "ciaSystem", "mainData"), { payload: JSON.stringify(window.globalDatabase) });
+              console.log("تم الحفظ في الفايربيس بنجاح");
+          } catch (e) {
+              console.error("خطأ في حفظ الفايربيس: ", e);
+          }
+          window.renderAllData();
+      };
+
+      // المزامنة التلقائية واللحظية بين الدول
+      onSnapshot(doc(db, "ciaSystem", "mainData"), (docSnap) => {
+          if (docSnap.exists()) {
+              const dataStr = docSnap.data().payload;
+              if (dataStr) {
+                  window.globalDatabase = JSON.parse(dataStr);
+                  document.getElementById("loading-status").innerText = "✅ متصل بالمنظومة الفدرالية (Firebase Live)";
+                  window.renderAllData();
+              }
+          } else {
+              // إذا أول مرة، نرفع البيانات الافتراضية
+              window.saveCloudData();
+          }
+      });
+    </script>
+
     <script>
-        const BIN_ID = "66f30a90e41b4d34e43681a2"; 
-        const API_KEY = "$2a$10$R90O.QvF3sSskB72X2.4EuK8S8zC83yG8S2/B69O7d3bI.8c2C4s2"; 
-        // البيانات الرئيسية
-        let defaultDatabase = {
-            users: {
-                "Karlos": { password: "admin", pin: "0000", id: "CIA-001", role: "DIRECTOR" },
-                "Mutleq": { password: "123", pin: "1234", id: "CIA-102", role: "CID Member" }
-            },
-            reports: [],
-            wanted: [
-                { id: 1, name: "MARK", risk: "خطر جداً", crime: "التهمة مطلوب وبشكل خطر على القطاعات الفدرالية..." }
-            ],
-            records: [],
-            gangs: [],
-            logs: ["[SYSTEM READY]: تم الاتصال بالسحابة الفدرالية."]
-        };
-
-        let globalDatabase = JSON.parse(localStorage.getItem("cia_database")) || defaultDatabase;
-        let currentUser = "";
-
-        // جلب البيانات من السحابة عند البداية
-        async function fetchCloudData() {
-            try {
-                const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-                    headers: { "X-Master-Key": API_KEY }
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data.record && data.record.users) {
-                        globalDatabase = data.record;
-                        localStorage.setItem("cia_database", JSON.stringify(globalDatabase));
-                    }
-                }
-            } catch (e) { console.log("Cloud sync error, using local database"); }
-            document.getElementById("loading-status").innerText = "✅ متصل بالمنظومة الفدرالية (Cloud & Local Sync)";
-            checkAutoLogin();
-        }
-
-        // حفظ كل شيء للسحابة أونلاين والمحلي
-        async function saveCloudData() {
-            localStorage.setItem("cia_database", JSON.stringify(globalDatabase));
-            try {
-                await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json", "X-Master-Key": API_KEY },
-                    body: JSON.stringify(globalDatabase)
-                });
-            } catch (e) { console.log("Cloud save warning"); }
-            renderAllData();
-        }
-
         function checkAutoLogin() {
             const savedUser = localStorage.getItem("active_cia_user");
             if (savedUser && globalDatabase.users[savedUser]) {
@@ -738,6 +751,7 @@
         function renderReports() {
             const list = document.getElementById("reports-list");
             const q = (document.getElementById("reportSearch")?.value || "").toLowerCase();
+            if (!list) return;
             list.innerHTML = "";
             globalDatabase.reports.filter(r => 
                 (r.title && r.title.toLowerCase().includes(q)) || 
@@ -785,7 +799,6 @@
             if (newRisk === null) return;
             const newCrime = prompt("تعديل التهم:", item.crime);
             if (newCrime === null) return;
-
             item.name = newName;
             item.risk = newRisk;
             item.crime = newCrime;
@@ -804,6 +817,7 @@
         function renderWanted() {
             const list = document.getElementById("wanted-list");
             const q = (document.getElementById("wantedSearch")?.value || "").toLowerCase();
+            if (!list) return;
             list.innerHTML = "";
             globalDatabase.wanted.filter(w => 
                 (w.name && w.name.toLowerCase().includes(q)) || 
@@ -850,7 +864,6 @@
             if (newCid === null) return;
             const newNotes = prompt("تعديل الملاحظات والقضايا:", item.notes);
             if (newNotes === null) return;
-
             item.name = newName;
             item.cid = newCid;
             item.notes = newNotes;
@@ -868,6 +881,7 @@
         function renderRecords() {
             const list = document.getElementById("records-list");
             const q = (document.getElementById("recordsSearch")?.value || "").toLowerCase();
+            if (!list) return;
             list.innerHTML = "";
             globalDatabase.records.filter(r => 
                 (r.name && r.name.toLowerCase().includes(q)) || 
@@ -907,7 +921,6 @@
             if (newName === null) return;
             const newDetails = prompt("تعديل التفاصيل:", item.details);
             if (newDetails === null) return;
-
             item.name = newName;
             item.details = newDetails;
             addLog(`قام [${currentUser}] بتعديل مخطط عصابة: ${item.name}`);
@@ -924,6 +937,7 @@
         function renderGangs() {
             const list = document.getElementById("gangs-list");
             const q = (document.getElementById("gangsSearch")?.value || "").toLowerCase();
+            if (!list) return;
             list.innerHTML = "";
             globalDatabase.gangs.filter(g => 
                 (g.name && g.name.toLowerCase().includes(q)) || 
@@ -953,7 +967,7 @@
             globalDatabase.users[user] = { password: pass, pin: pin, id: id, role: "SPECIAL AGENT" };
             addLog(`تم إنشاء حساب جديد لـ: ${user}`);
             await saveCloudData();
-            alert(`تم إضافة الحساب (${user}) أونلاين!`);
+            alert(`تم إضافة الحساب (${user}) أونلاين بنجاح!`);
         }
 
         async function deleteAccount(username) {
@@ -968,10 +982,8 @@
             const container = document.getElementById("users-container");
             const tbody = document.getElementById("users-table-body");
             const q = (document.getElementById("usersSearch")?.value || "").toLowerCase();
-
             if (container) container.innerHTML = "";
             if (tbody) tbody.innerHTML = "";
-
             for (let user in globalDatabase.users) {
                 const u = globalDatabase.users[user];
                 if (user.toLowerCase().includes(q) || u.id.toLowerCase().includes(q) || u.role.toLowerCase().includes(q)) {
@@ -1046,71 +1058,6 @@
             document.getElementById("login-screen").style.display = "block";
             document.getElementById("main-system").style.display = "none";
         }
-
-        // جلب البيانات فور تحميل الصفحة
-        fetchCloudData();
     </script>
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { 
-    getFirestore, 
-    doc, 
-    setDoc, 
-    getDoc, 
-    onSnapshot 
-  } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyA-beJLIumvemTm53OjjIPFC7cvYMGrNcc",
-    authDomain: "cia1-d5a55.firebaseapp.com",
-    projectId: "cia1-d5a55",
-    storageBucket: "cia1-d5a55.firebasestorage.app",
-    messagingSenderId: "415185058248",
-    appId: "1:415185058248:web:92b9145c4562101491e8fd",
-    measurementId: "G-JK7PBVJ2PY"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  // دالة لحفظ أي تعديل أو حساب جديد سحابياً
-  window.saveDataToCloud = async function(data) {
-    try {
-      await setDoc(doc(db, "ciaSystem", "mainData"), { payload: JSON.stringify(data) });
-      console.log("تم الحفظ سحابياً بنجاح");
-    } catch (e) {
-      console.error("خطأ في الحفظ السحابي: ", e);
-    }
-  };
-
-  // دالة لجلب البيانات عند فتح الصفحة أول مرة
-  window.fetchCloudData = async function() {
-    try {
-      const docSnap = await getDoc(doc(db, "ciaSystem", "mainData"));
-      if (docSnap.exists()) {
-        const cloudPayload = docSnap.data().payload;
-        if (cloudPayload) {
-          localStorage.setItem("ciaData", cloudPayload);
-        }
-      }
-    } catch (e) {
-      console.error("خطأ في جلب البيانات: ", e);
-    }
-  };
-
-  // المزامنة اللحظية الحية بينك وبين صديقك
-  onSnapshot(doc(db, "ciaSystem", "mainData"), (docSnap) => {
-    if (docSnap.exists()) {
-      const cloudPayload = docSnap.data().payload;
-      if (cloudPayload && cloudPayload !== localStorage.getItem("ciaData")) {
-        localStorage.setItem("ciaData", cloudPayload);
-        if (typeof renderData === "function") renderData();
-      }
-    }
-  });
-
-  // جلب البيانات فور تحميل الصفحة
-  window.fetchCloudData();
-</script>   
 </body>
 </html>
