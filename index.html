@@ -1056,6 +1056,7 @@
     getFirestore, 
     doc, 
     setDoc, 
+    getDoc, 
     onSnapshot 
   } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
@@ -1072,27 +1073,44 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // دالة لحفظ أي بيانات سحابياً
-  window.saveToCloud = async function(data) {
+  // دالة لحفظ أي تعديل أو حساب جديد سحابياً
+  window.saveDataToCloud = async function(data) {
     try {
-      await setDoc(doc(db, "appData", "mainStore"), { content: data });
+      await setDoc(doc(db, "ciaSystem", "mainData"), { payload: JSON.stringify(data) });
+      console.log("تم الحفظ سحابياً بنجاح");
     } catch (e) {
       console.error("خطأ في الحفظ السحابي: ", e);
     }
   };
 
-  // الاستماع الفوري للتعديلات من أي دولة
-  onSnapshot(doc(db, "appData", "mainStore"), (docSnap) => {
+  // دالة لجلب البيانات عند فتح الصفحة أول مرة
+  window.fetchCloudData = async function() {
+    try {
+      const docSnap = await getDoc(doc(db, "ciaSystem", "mainData"));
+      if (docSnap.exists()) {
+        const cloudPayload = docSnap.data().payload;
+        if (cloudPayload) {
+          localStorage.setItem("ciaData", cloudPayload);
+        }
+      }
+    } catch (e) {
+      console.error("خطأ في جلب البيانات: ", e);
+    }
+  };
+
+  // المزامنة اللحظية الحية بينك وبين صديقك
+  onSnapshot(doc(db, "ciaSystem", "mainData"), (docSnap) => {
     if (docSnap.exists()) {
-      const data = docSnap.data().content;
-      localStorage.setItem("ciaData", JSON.stringify(data));
-      // إعادة تحميل الصفحة أو تحديث الواجهة تلقائياً عند وصول تعديل جديد
-      if (window.location.reload && !window.isUpdating) {
-        window.isUpdating = true;
-        location.reload();
+      const cloudPayload = docSnap.data().payload;
+      if (cloudPayload && cloudPayload !== localStorage.getItem("ciaData")) {
+        localStorage.setItem("ciaData", cloudPayload);
+        if (typeof renderData === "function") renderData();
       }
     }
   });
+
+  // جلب البيانات فور تحميل الصفحة
+  window.fetchCloudData();
 </script>
     
 </body>
