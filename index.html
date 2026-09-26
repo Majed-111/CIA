@@ -73,9 +73,43 @@
             0% { opacity: 0.02; transform: translate(-50%, -50%) scale(0.98); }
             100% { opacity: 0.05; transform: translate(-50%, -50%) scale(1.02); }
         }
-        /* شاشة التحميل والتحقيق الفيدرالية في البداية */
-        #loader-screen {
+
+        /* 1. شاشة النقر البدائية لتفعيل الصوت بموافقة المتصفح */
+        #start-prompt-screen {
             display: flex;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(3, 6, 9, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 10000;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+        .btn-start-sound {
+            padding: 16px 36px;
+            background: linear-gradient(135deg, var(--gold-color), #9a7b3e);
+            color: #000;
+            border: 2px solid var(--gold-light);
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 0 25px rgba(197, 160, 89, 0.4);
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        .btn-start-sound:hover {
+            transform: scale(1.05);
+            background: var(--gold-light);
+            box-shadow: 0 0 35px rgba(0, 210, 255, 0.6);
+        }
+
+        /* 2. شاشة التحميل والتحقيق الفيدرالية */
+        #loader-screen {
+            display: none;
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(3, 6, 9, 0.96);
@@ -137,7 +171,8 @@
             margin-top: 12px;
             letter-spacing: 1px;
         }
-        /* شاشة تسجيل الدخول الاصلي */
+
+        /* 3. شاشة تسجيل الدخول الأصلي */
         .login-card {
             display: none;
             position: relative;
@@ -278,7 +313,8 @@
             margin-top: 10px;
             font-family: var(--font-code);
         }
-        /* النظام الداخلي */
+
+        /* 4. النظام الداخلي التكتيكي */
         #main-system {
             display: none;
             position: relative;
@@ -348,6 +384,7 @@
             color: var(--gold-light); 
             border-color: var(--gold-color);
         }
+
         /* المجلدات */
         .folder-grid-panel {
             background: var(--panel-bg);
@@ -587,11 +624,21 @@
     </style>
 </head>
 <body>
-    <!-- 1. خلفية الكلام والتشفير المتحرك (Matrix Code Rain) -->
+    <!-- خلفية الكود المتحرك -->
     <canvas id="bg-canvas"></canvas>
     <div class="bg-watermark">CIA</div>
 
-    <!-- 2. شاشة الانتظار والفك التشفيري في البداية عند الفتح -->
+    <!-- 1. شاشة النقر المباشر لبدء تشغيل الأصوات والتحميل بموافقة المتصفح -->
+    <div id="start-prompt-screen">
+        <div class="logo-container" style="width:120px; height:120px;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/25/Seal_of_the_Central_Intelligence_Agency.svg" alt="CIA Seal">
+        </div>
+        <h2 style="color:var(--gold-light); font-weight:800; margin-top:15px;">CIA FEDERAL TERMINAL</h2>
+        <p style="color:var(--accent-cyan); font-size:14px; margin-top:8px;">اضغط على الزر أدناه لبدء الاتصال وتفعيل النظام الصوتي والتشفير الميداني</p>
+        <button class="btn-start-sound" onclick="startSystemWithAudio()">🔊 بدء الاتصال بالمنظومة الفيدرالية</button>
+    </div>
+
+    <!-- 2. شاشة الانتظار والفك التشفيري بعد النقر -->
     <div id="loader-screen">
         <div class="loader-spinner"></div>
         <h3 class="loader-title">CONNECTING TO FEDERAL SYSTEM...</h3>
@@ -788,7 +835,7 @@
             <div id="gangs-list"></div>
         </div>
 
-        <!-- 5. المجلد الجديد الخاص بـ فك التشفير الشفري -->
+        <!-- 5. المجلد الخاص بـ فك التشفير الشفري -->
         <div class="workspace-panel" id="decryptSection">
             <button class="btn-back" onclick="showHome()">← العودة للرئيسية</button>
             <h3 style="color:var(--gold-light); margin-bottom:15px;">🔓 وحدة التشفير وفك الشفرات الفدرالية</h3>
@@ -893,32 +940,41 @@
       });
     </script>
 
-    <!-- محرك الصوت التكتيكي والشاشات -->
+    <!-- محرك الصوت الشامل والشاشات -->
     <script>
-        /* محرك الأصوات المركبة: صوت شفرة + صوت تشويش راديو + طقطقة + همهمة وسوالف مكتب */
         const AudioCtx = window.AudioContext || window.webkitAudioContext;
         let audioCtx = null;
 
-        function playTacticalAmbienceAudio() {
-            try {
-                if (!audioCtx) audioCtx = new AudioCtx();
-                if (audioCtx.state === 'suspended') audioCtx.resume();
+        function startSystemWithAudio() {
+            document.getElementById("start-prompt-screen").style.display = "none";
+            document.getElementById("loader-screen").style.display = "flex";
 
+            // تفعيل محرك الصوت بمجرد الضغط
+            if (!audioCtx) audioCtx = new AudioCtx();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            runLoaderSequence();
+        }
+
+        /* توليد وتشغيل أصوات شفرات هكر + تشويش راديو لاسلكي + همهمات عملاء بمكتب Operations */
+        function playTacticalAudioPulse() {
+            try {
+                if (!audioCtx) return;
                 const t = audioCtx.currentTime;
 
-                // 1. صوت شفرة بيب هكر متسارع
+                // 1. صوت شفرة/بيپ إلكتروني متسارع (Beep Oscillators)
                 const oscCode = audioCtx.createOscillator();
                 const gainCode = audioCtx.createGain();
                 oscCode.type = 'sawtooth';
-                oscCode.frequency.setValueAtTime(300 + Math.random() * 900, t);
-                gainCode.gain.setValueAtTime(0.04, t);
+                oscCode.frequency.setValueAtTime(300 + Math.random() * 800, t);
+                gainCode.gain.setValueAtTime(0.06, t);
                 oscCode.connect(gainCode);
                 gainCode.connect(audioCtx.destination);
                 oscCode.start(t);
                 oscCode.stop(t + 0.05);
 
-                // 2. صوت تشويش راديو اللاسلكي الفيدرالي (Radio Static)
-                const bufSize = audioCtx.sampleRate * 0.08;
+                // 2. صوت تشويش راديو اللاسلكي الفيدرالي (Radio Static Noise)
+                const bufSize = audioCtx.sampleRate * 0.1;
                 const buffer = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
                 const outData = buffer.getChannelData(0);
                 for (let i = 0; i < bufSize; i++) outData[i] = Math.random() * 2 - 1;
@@ -927,36 +983,36 @@
                 staticNoise.buffer = buffer;
                 const noiseFilter = audioCtx.createBiquadFilter();
                 noiseFilter.type = 'bandpass';
-                noiseFilter.frequency.value = 1300;
+                noiseFilter.frequency.value = 1400;
                 const noiseGain = audioCtx.createGain();
-                noiseGain.gain.setValueAtTime(0.03, t);
+                noiseGain.gain.setValueAtTime(0.04, t);
 
                 staticNoise.connect(noiseFilter);
                 noiseFilter.connect(noiseGain);
                 noiseGain.connect(audioCtx.destination);
                 staticNoise.start(t);
 
-                // 3. محاكاة اصوات عملاء يسولفون بالخلفية وفي مكتب العمليات (Office Murmur Chatter)
-                if (Math.random() > 0.35) {
+                // 3. أصوات همهمات وسوالف العملاء بالمكتب من مسافة (Office Murmur Background)
+                if (Math.random() > 0.3) {
                     const murmurOsc = audioCtx.createOscillator();
                     const murmurGain = audioCtx.createGain();
                     const murmurFilter = audioCtx.createBiquadFilter();
 
                     murmurOsc.type = 'sawtooth';
-                    murmurOsc.frequency.setValueAtTime(110 + Math.random() * 90, t); // تردد الصوت البشري
+                    murmurOsc.frequency.setValueAtTime(100 + Math.random() * 100, t);
 
                     murmurFilter.type = 'lowpass';
-                    murmurFilter.frequency.setValueAtTime(280, t); // كتم الصوت ليعطي شعور الكلام من مسافة بالمكتب
+                    murmurFilter.frequency.setValueAtTime(300, t);
 
-                    murmurGain.gain.setValueAtTime(0.018, t);
-                    murmurGain.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+                    murmurGain.gain.setValueAtTime(0.025, t);
+                    murmurGain.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
 
                     murmurOsc.connect(murmurFilter);
                     murmurFilter.connect(murmurGain);
                     murmurGain.connect(audioCtx.destination);
 
                     murmurOsc.start(t);
-                    murmurOsc.stop(t + 0.1);
+                    murmurOsc.stop(t + 0.12);
                 }
             } catch (e) {}
         }
@@ -973,7 +1029,7 @@
             }
         }
 
-        /* خلفية التشفير المتحركة السي آي إيه */
+        /* خلفية التشفير المتحركة */
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         function resizeCanvas() {
@@ -1005,8 +1061,8 @@
         }
         setInterval(drawMatrix, 40);
 
-        /* تشغيل شاشة الانتظار الفيدرالية في البداية تلقائياً مع كافة الأصوات المطلوبة */
-        window.addEventListener("DOMContentLoaded", () => {
+        /* تشغيل سلسلة التحميل 5 ثوانٍ بعد الضغط */
+        function runLoaderSequence() {
             const loader = document.getElementById("loader-screen");
             const fill = document.getElementById("progress-fill");
             const statusTxt = document.getElementById("loader-status");
@@ -1020,10 +1076,10 @@
                 "CIPHER BROKEN - ACCESS GRANTED!"
             ];
             let progress = 0;
-            let audioInterval = setInterval(playTacticalAmbienceAudio, 75); // تفعيل أصوات الشفرات والراديو والسوالف
+            let soundInterval = setInterval(playTacticalAudioPulse, 70); // أصوات شفرات وراديو وسوالف مكررة
             
             let interval = setInterval(() => {
-                progress += 2; // 100% خلال 5 ثوانٍ تماماً
+                progress += 2;
                 fill.style.width = progress + "%";
                 
                 let statusIdx = Math.floor((progress / 100) * statuses.length);
@@ -1032,15 +1088,15 @@
                 }
                 if (progress >= 100) {
                     clearInterval(interval);
-                    clearInterval(audioInterval);
+                    clearInterval(soundInterval);
                     loader.style.display = "none";
-                    document.getElementById("login-screen").style.display = "block"; // فتح شاشة تسجيل الدخول الأصلية
+                    document.getElementById("login-screen").style.display = "block"; // فتح شاشة تسجيل الدخول
                     playWelcomeSpeech();
                 }
             }, 100);
-        });
+        }
 
-        /* تسجيل الدخول الأصلي */
+        /* تسجيل الدخول والعمليات الداخلي */
         function login() {
             const user = document.getElementById("login-username").value.trim();
             const pass = document.getElementById("login-password").value.trim();
@@ -1086,7 +1142,7 @@
             renderLogs();
         }
 
-        /* 1. التقارير */
+        /* التقارير والمطلوبون والسجلات */
         async function addReport() {
             const title = document.getElementById("reportTitle").value.trim();
             const details = document.getElementById("reportDetails").value.trim();
@@ -1162,7 +1218,6 @@
             });
         }
 
-        /* 2. المطلوبون */
         async function addWanted() {
             const name = document.getElementById("wantedName").value.trim();
             const risk = document.getElementById("wantedRisk").value.trim();
@@ -1228,7 +1283,6 @@
             });
         }
 
-        /* 3. السجل الجنائي */
         async function addRecord() {
             const name = document.getElementById("recName").value.trim();
             const cid = document.getElementById("recId").value.trim();
@@ -1289,7 +1343,6 @@
             });
         }
 
-        /* 4. مخططات العصابات */
         async function addGang() {
             const name = document.getElementById("gangName").value.trim();
             const details = document.getElementById("gangDetails").value.trim();
@@ -1344,7 +1397,6 @@
             });
         }
 
-        /* نظام الرتب وإدارة الحسابات للدايركتور */
         async function createAccount() {
             const user = document.getElementById("new-username").value.trim();
             const id = document.getElementById("new-id").value.trim();
@@ -1410,7 +1462,6 @@
             }
         }
 
-        /* Log */
         function addLog(text) {
             const time = new Date().toLocaleTimeString('ar-EG');
             globalDatabase.logs.unshift(`[${time}] ${text}`);
@@ -1425,7 +1476,6 @@
             }
         }
 
-        /* الشاشات */
         function showHome() {
             document.getElementById("folderHome").style.display = "block";
             const panels = document.querySelectorAll('.workspace-panel');
@@ -1440,7 +1490,6 @@
             if (target) target.style.display = "block";
         }
 
-        /* التشفير */
         function encryptMsg() {
             const val = document.getElementById("plainText").value.trim();
             if (!val) return;
