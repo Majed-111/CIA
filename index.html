@@ -25,7 +25,6 @@
             --font-main: 'Tajawal', sans-serif;
             --font-code: 'JetBrains Mono', monospace;
         }
-
         * {
             box-sizing: border-box;
             margin: 0;
@@ -33,7 +32,6 @@
             font-family: var(--font-main);
             -webkit-font-smoothing: antialiased;
         }
-
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
@@ -45,8 +43,7 @@
             overflow-x: hidden;
             position: relative;
         }
-
-        /* === 1. خلفية الكلام المتحرك وشعار CIA === */
+        /* Canvas الخلفية المتحركة */
         #bg-canvas {
             position: fixed;
             top: 0;
@@ -55,9 +52,8 @@
             height: 100vh;
             z-index: 0;
             pointer-events: none;
-            opacity: 0.18;
+            opacity: 0.22;
         }
-
         .bg-watermark {
             position: fixed;
             top: 50%;
@@ -73,13 +69,11 @@
             user-select: none;
             animation: pulseWatermark 8s infinite alternate ease-in-out;
         }
-
         @keyframes pulseWatermark {
             0% { opacity: 0.02; transform: translate(-50%, -50%) scale(0.98); }
             100% { opacity: 0.05; transform: translate(-50%, -50%) scale(1.02); }
         }
-
-        /* === 2. شاشة الانتظار (الـ 5 ثواني) === */
+        /* شاشة التحميل والتحقيق (5 ثوانٍ) */
         #loader-screen {
             display: none;
             position: fixed;
@@ -93,7 +87,6 @@
             color: var(--gold-light);
             text-align: center;
         }
-
         .loader-spinner {
             width: 80px;
             height: 80px;
@@ -105,14 +98,12 @@
             margin-bottom: 20px;
             box-shadow: 0 0 25px rgba(0, 210, 255, 0.2);
         }
-
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
         .progress-bar-container {
-            width: 300px;
+            width: 320px;
             height: 6px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 4px;
@@ -120,14 +111,12 @@
             border: 1px solid var(--border-color);
             margin-top: 15px;
         }
-
         .progress-bar-fill {
             height: 100%;
             width: 0%;
             background: linear-gradient(90deg, var(--gold-color), var(--accent-cyan));
             transition: width 0.1s linear;
         }
-
         .loader-status-text {
             font-family: var(--font-code);
             font-size: 12px;
@@ -135,8 +124,7 @@
             margin-top: 10px;
             letter-spacing: 1px;
         }
-
-        /* === 3. شاشة تسجيل الدخول === */
+        /* شاشة تسجيل الدخول */
         .login-card {
             position: relative;
             z-index: 10;
@@ -151,7 +139,6 @@
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(197, 160, 89, 0.1);
             overflow: hidden;
         }
-
         .login-card::before {
             content: '';
             position: absolute;
@@ -159,7 +146,6 @@
             height: 3px;
             background: linear-gradient(90deg, transparent, var(--gold-color), transparent);
         }
-
         .subtitle-top {
             font-family: var(--font-code);
             font-size: 11px;
@@ -169,7 +155,6 @@
             margin-bottom: 20px;
             text-transform: uppercase;
         }
-
         .logo-container {
             width: 110px;
             height: 110px;
@@ -182,14 +167,12 @@
             background: rgba(0, 0, 0, 0.6);
             box-shadow: 0 0 25px rgba(197, 160, 89, 0.3);
         }
-
         .logo-container img {
             width: 90px;
             height: 90px;
             border-radius: 50%;
             object-fit: cover;
         }
-
         .title {
             color: var(--gold-light);
             font-size: 24px;
@@ -197,7 +180,6 @@
             letter-spacing: 1px;
             margin-bottom: 4px;
         }
-
         .agency-name {
             color: var(--text-muted);
             font-family: var(--font-code);
@@ -205,12 +187,10 @@
             letter-spacing: 2px;
             margin-bottom: 25px;
         }
-
         .input-group {
             text-align: right;
             margin-bottom: 16px;
         }
-
         .input-group label {
             display: block;
             font-size: 12px;
@@ -218,7 +198,6 @@
             margin-bottom: 6px;
             font-weight: 700;
         }
-
         .input-group input, .input-group select, .input-group textarea {
             width: 100%;
             padding: 12px 15px;
@@ -231,18 +210,15 @@
             outline: none;
             transition: all 0.3s ease;
         }
-
         .input-group input:focus, .input-group textarea:focus {
             border-color: var(--accent-cyan);
             box-shadow: 0 0 12px var(--border-glow);
         }
-
         .search-box {
             margin-bottom: 15px;
             border-color: var(--gold-color) !important;
             background: var(--input-bg) !important;
         }
-
         .btn-login {
             width: 100%;
             padding: 13px;
@@ -257,13 +233,20 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(197, 160, 89, 0.2);
         }
-
         .btn-login:hover {
             transform: translateY(-1px);
             box-shadow: 0 6px 20px rgba(197, 160, 89, 0.4);
             background: linear-gradient(135deg, var(--gold-light), var(--gold-color));
         }
-
+        .federal-footer-text {
+            margin-top: 18px;
+            font-size: 12px;
+            color: var(--gold-light);
+            font-weight: 800;
+            letter-spacing: 1px;
+            border-top: 1px dashed var(--border-color);
+            padding-top: 12px;
+        }
         .error-msg {
             color: var(--danger-color);
             font-size: 12px;
@@ -275,15 +258,13 @@
             border-radius: 6px;
             border: 1px solid rgba(255, 51, 68, 0.2);
         }
-
         .sync-status {
             font-size: 11px;
             color: var(--accent-cyan);
-            margin-top: 12px;
+            margin-top: 10px;
             font-family: var(--font-code);
         }
-
-        /* === 4. النظام الداخلي التكتيكي === */
+        /* النظام الداخلي */
         #main-system {
             display: none;
             position: relative;
@@ -291,7 +272,6 @@
             width: 100%;
             max-width: 1200px;
         }
-
         .header-system {
             display: flex;
             justify-content: space-between;
@@ -304,24 +284,42 @@
             margin-bottom: 25px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.6);
         }
-
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .btn-control-panel {
+            background: linear-gradient(135deg, var(--gold-color), #9a7b3e);
+            color: #000;
+            border: none;
+            padding: 9px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 12px rgba(197, 160, 89, 0.3);
+        }
+        .btn-control-panel:hover {
+            background: var(--gold-light);
+            transform: translateY(-1px);
+        }
         .btn-logout {
             background: var(--danger-bg);
             color: var(--danger-color);
             border: 1px solid var(--danger-color);
-            padding: 9px 20px;
+            padding: 9px 18px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 700;
             font-size: 12px;
             transition: all 0.3s ease;
         }
-
         .btn-logout:hover {
             background: var(--danger-color);
             color: #fff;
         }
-
         .badge {
             padding: 4px 10px;
             border-radius: 5px;
@@ -331,14 +329,12 @@
             color: var(--accent-cyan);
             border: 1px solid var(--accent-blue);
         }
-
         .badge-leader { 
             background: rgba(197, 160, 89, 0.15); 
             color: var(--gold-light); 
             border-color: var(--gold-color);
         }
-
-        /* شبكة المجلدات */
+        /* المجلدات */
         .folder-grid-panel {
             background: var(--panel-bg);
             backdrop-filter: blur(10px);
@@ -348,25 +344,21 @@
             margin-bottom: 25px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
-
         .grid-title {
             color: var(--gold-light);
             font-size: 20px;
             margin-bottom: 5px;
             font-weight: 800;
         }
-
         .folder-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
             margin-top: 20px;
         }
-
         @media (max-width: 768px) {
             .folder-grid { grid-template-columns: 1fr; }
         }
-
         .folder-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -378,7 +370,6 @@
             position: relative;
             overflow: hidden;
         }
-
         .folder-card::before {
             content: '';
             position: absolute;
@@ -387,19 +378,16 @@
             opacity: 0;
             transition: 0.3s;
         }
-
         .folder-card:hover {
             border-color: var(--accent-cyan);
             transform: translateY(-3px);
             background: rgba(20, 30, 48, 0.8);
             box-shadow: 0 10px 20px rgba(0, 210, 255, 0.1);
         }
-
         .folder-card:hover::before {
             opacity: 1;
             background: var(--accent-cyan);
         }
-
         .folder-card b {
             display: block;
             color: var(--gold-light);
@@ -408,12 +396,10 @@
             letter-spacing: 1px;
             font-family: var(--font-code);
         }
-
         .folder-card small {
             color: var(--text-muted);
             font-size: 12px;
         }
-
         .folder-card .open-lbl {
             position: absolute;
             bottom: 12px;
@@ -424,8 +410,6 @@
             font-family: var(--font-code);
             font-weight: 600;
         }
-
-        /* أقسام العمل */
         .workspace-panel {
             display: none;
             background: var(--panel-bg);
@@ -436,7 +420,6 @@
             margin-bottom: 25px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
-
         .btn-back {
             background: var(--input-bg);
             color: var(--text-main);
@@ -449,32 +432,25 @@
             font-size: 12px;
             transition: all 0.3s ease;
         }
-
         .btn-back:hover {
             border-color: var(--gold-color);
             color: var(--gold-light);
         }
-
-        /* أدوات التشفير */
         .crypto-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
             margin-bottom: 20px;
         }
-
         @media (max-width: 768px) {
             .crypto-grid { grid-template-columns: 1fr; }
         }
-
         .crypto-box {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             padding: 18px;
             border-radius: 8px;
         }
-
-        /* سجل الميدان */
         .log-box {
             background: #020406;
             border: 1px solid var(--border-color);
@@ -488,7 +464,6 @@
             max-height: 200px;
             overflow-y: auto;
         }
-
         .log-title {
             color: var(--accent-cyan);
             font-weight: 700;
@@ -496,8 +471,6 @@
             border-bottom: 1px dashed var(--border-color);
             padding-bottom: 5px;
         }
-
-        /* بطاقات البيانات والمطلوبين */
         .data-card {
             border: 1px solid var(--border-color);
             background: var(--card-bg);
@@ -507,12 +480,10 @@
             position: relative;
             backdrop-filter: blur(5px);
         }
-
         .wanted-card {
             border-color: rgba(255, 51, 68, 0.4);
             background: var(--danger-bg);
         }
-
         .badge-danger {
             background: var(--danger-color);
             color: #fff;
@@ -521,7 +492,6 @@
             border-radius: 4px;
             font-weight: 700;
         }
-
         .action-btns {
             position: absolute;
             top: 12px;
@@ -529,7 +499,6 @@
             display: flex;
             gap: 6px;
         }
-
         .btn-del-item {
             background: var(--danger-bg);
             color: var(--danger-color);
@@ -541,12 +510,10 @@
             font-weight: 700;
             transition: 0.2s;
         }
-
         .btn-del-item:hover {
             background: var(--danger-color);
             color: #fff;
         }
-
         .btn-edit-item {
             background: rgba(197, 160, 89, 0.15);
             color: var(--gold-light);
@@ -558,32 +525,26 @@
             font-weight: 700;
             transition: 0.2s;
         }
-
         .btn-edit-item:hover {
             background: var(--gold-color);
             color: #000;
         }
-
-        /* الجداول */
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 18px;
             font-size: 13px;
         }
-
         th, td {
             padding: 12px;
             border: 1px solid var(--border-color);
             text-align: right;
         }
-
         th {
             background: var(--input-bg);
             color: var(--gold-light);
             font-weight: 800;
         }
-
         .leader-panel {
             border: 1px solid var(--gold-color);
             background: rgba(197, 160, 89, 0.03);
@@ -591,7 +552,6 @@
             border-radius: 12px;
             margin-bottom: 25px;
         }
-
         .user-list-item {
             display: flex;
             justify-content: space-between;
@@ -603,7 +563,6 @@
             border: 1px solid var(--border-color);
             font-size: 13px;
         }
-
         .img-preview {
             max-width: 100%;
             max-height: 220px;
@@ -614,22 +573,21 @@
     </style>
 </head>
 <body>
-
-    <!-- Canvas الخلفية المتحركة -->
+    <!-- 1. خلفية الكلام والتشفير المتحرك (Matrix Code Rain) -->
     <canvas id="bg-canvas"></canvas>
     <div class="bg-watermark">CIA</div>
 
-    <!-- شاشة الانتظار والمحاكاة لمدة 5 ثوانٍ -->
+    <!-- 2. شاشة الانتظار والفك التشفيري للتحقيقات (5 ثوانٍ) -->
     <div id="loader-screen">
         <div class="loader-spinner"></div>
-        <h3 style="letter-spacing: 2px; font-weight:800;">DECRYPTING FEDERAL DATA TERMINAL</h3>
+        <h3 style="letter-spacing: 2px; font-weight:800;">INVESTIGATION & DECRYPTION PROTOCOL</h3>
         <div class="progress-bar-container">
             <div class="progress-bar-fill" id="progress-fill"></div>
         </div>
-        <div class="loader-status-text" id="loader-status">INITIALIZING ENCRYPTION PROTOCOLS...</div>
+        <div class="loader-status-text" id="loader-status">CONNECTING TO CIA FEDERAL DATABASE...</div>
     </div>
 
-    <!-- 1. شاشة تسجيل الدخول -->
+    <!-- 3. شاشة تسجيل الدخول الرئيسي -->
     <div class="login-card" id="login-screen">
         <div class="subtitle-top">CIA • FEDERAL DATA TERMINAL</div>
         
@@ -653,11 +611,12 @@
         </div>
         
         <button class="btn-login" onclick="login()">تسجيل الدخول للمنظومة الفدرالية</button>
+        <div class="federal-footer-text">اتصال بالمنظومة الفيدرالية</div>
         <div class="sync-status" id="loading-status">🔄 جاري الاتصال بالفايربيس...</div>
         <div class="error-msg" id="error-msg">⚠️ خطأ: اسم المستخدم، كلمة السر، أو الرمز غير صحيح!</div>
     </div>
 
-    <!-- 2. النظام الداخلي -->
+    <!-- 4. النظام الداخلي التكتيكي -->
     <div id="main-system">
         
         <!-- الهيدر العلوي -->
@@ -665,11 +624,15 @@
             <div>
                 <h3 style="margin:0; color:var(--gold-light); font-size:18px; font-weight:800;">🛡️ CIA SYSTEM | نظام التحكم والاستخبارات</h3>
                 <small style="color:var(--text-muted); font-size:12px;">
-                    العضو: <span id="current-user-display" style="color:var(--accent-cyan); font-weight:bold;">Mutleq</span> 
+                    العضو: <span id="current-user-display" style="color:var(--accent-cyan); font-weight:bold;">Agent</span> 
                     | الرتبة: <span id="current-role-display" class="badge">CID Member</span>
                 </small>
             </div>
-            <button class="btn-logout" onclick="logout()">تسجيل الخروج</button>
+            <div class="header-actions">
+                <!-- زر التحكم الخاص بالـ DIRECTOR يظهر أعلى اليمين بجانب تسجيل الخروج -->
+                <button id="btn-leader-control" class="btn-control-panel" style="display: none;" onclick="openSection('leaderControlSection')">👑 نظام التحكم</button>
+                <button class="btn-logout" onclick="logout()">تسجيل الخروج</button>
+            </div>
         </div>
 
         <!-- شبكة المجلدات الستة -->
@@ -697,9 +660,10 @@
                     <small>ملفات الاستخبارات</small>
                     <span class="open-lbl">OPEN FOLDER →</span>
                 </div>
-                <div class="folder-card" onclick="openSection('casesSection')">
-                    <b>CASES 📁</b>
-                    <small>القضايا والعقوبات</small>
+                <!-- مجلد فك التشفير الجديد الذي تم نقله بدلاً من مجلد القضايا والعقوبات -->
+                <div class="folder-card" onclick="openSection('decryptSection')">
+                    <b>DECRYPTION 🔓</b>
+                    <small>فك التشفير والشفرات</small>
                     <span class="open-lbl">OPEN FOLDER →</span>
                 </div>
                 <div class="folder-card" onclick="openSection('usersSection')">
@@ -713,19 +677,32 @@
             </div>
         </div>
 
-        <!-- لوحة إدارة الحسابات للـ DIRECTOR -->
-        <div id="leader-section" class="leader-panel" style="display: none;">
-            <h3 style="color:var(--gold-light); margin-top:0;">👑 مركز إدارة التراخيص والسرية</h3>
-            <p style="font-size:12px; color:var(--text-muted); margin-bottom: 15px;">إنشاء وتحديث الحسابات بالسحابة أونلاين:</p>
+        <!-- قسم نظام التحكم وإدارة الرتب والأنظمة (خاص برتبة DIRECTOR) -->
+        <div class="workspace-panel leader-panel" id="leaderControlSection">
+            <button class="btn-back" onclick="showHome()">← العودة للرئيسية</button>
+            <h3 style="color:var(--gold-light); margin-top:0;">👑 مركز نظام التحكم وإدارة الرتب (DIRECTOR CONTROL)</h3>
+            <p style="font-size:12px; color:var(--text-muted); margin-bottom: 15px;">إضافة حسابات جديدة وتعيين الرتب والتعديل عليها أونلاين:</p>
             
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
                 <div class="input-group"><label>اسم الوكيل</label><input type="text" id="new-username" placeholder="Username..."></div>
                 <div class="input-group"><label>المعرف (Badge ID)</label><input type="text" id="new-id" placeholder="CIA-709"></div>
                 <div class="input-group"><label>كلمة المرور</label><input type="text" id="new-password" placeholder="Passcode..."></div>
                 <div class="input-group"><label>رمز PIN</label><input type="text" id="new-pin" placeholder="PIN..."></div>
+                <div class="input-group">
+                    <label>الرتبة الممنوحة</label>
+                    <select id="new-role">
+                        <option value="CID Member">CID Member</option>
+                        <option value="SPECIAL AGENT">SPECIAL AGENT</option>
+                        <option value="SENIOR AGENT">SENIOR AGENT</option>
+                        <option value="FIELD COMMANDER">FIELD COMMANDER</option>
+                        <option value="DIRECTOR">DIRECTOR</option>
+                    </select>
+                </div>
             </div>
-            <button class="btn-login" style="background:var(--success-color); color:#fff; font-size: 13px;" onclick="createAccount()">➕ إضافة الحساب أونلاين</button>
-            <div id="users-container" style="margin-top:15px;"></div>
+            <button class="btn-login" style="background:var(--success-color); color:#fff; font-size: 13px;" onclick="createAccount()">➕ إضافة / تحديث الحساب والرتبة</button>
+            
+            <h4 style="color:var(--gold-light); margin-top:20px;">👥 الأعضاء الحاليون والتحكم برتبهم:</h4>
+            <div id="users-container" style="margin-top:10px;"></div>
         </div>
 
         <!-- 1. قسم التقارير -->
@@ -748,24 +725,9 @@
             <div class="log-box" id="reports-log"></div>
         </div>
 
-        <!-- 2. قسم المطلوبين + أدوات التشفير -->
+        <!-- 2. قسم المطلوبين -->
         <div class="workspace-panel" id="wantedSection">
             <button class="btn-back" onclick="showHome()">← العودة للرئيسية</button>
-            
-            <div class="crypto-grid">
-                <div class="crypto-box">
-                    <label style="color:var(--accent-cyan); font-weight:bold; font-size:12px;">🔒 تشفير رسالة</label>
-                    <input type="text" id="plainText" placeholder="أدخل النص..." style="margin-top:8px;">
-                    <button class="btn-login" style="margin-top:10px; background:var(--accent-blue); color:#fff;" onclick="encryptMsg()">تشفير</button>
-                </div>
-                <div class="crypto-box">
-                    <label style="color:var(--gold-light); font-weight:bold; font-size:12px;">🔓 فك التشفير</label>
-                    <input type="text" id="cipherText" placeholder="أدخل الكود..." style="margin-top:8px;">
-                    <button class="btn-login" style="margin-top:10px; background:var(--gold-color); color:#000;" onclick="decryptMsg()">فك التشفير</button>
-                </div>
-            </div>
-            <div style="margin-bottom: 20px; font-size:13px; font-family:var(--font-code);">النتيجة الحالية: <b id="cryptoResult" style="color:var(--success-color);">-</b></div>
-            
             <h3 style="color:var(--gold-light); margin-bottom: 15px;">📜 قائمة المطلوبين للعدالة (WANTED LIST)</h3>
             
             <div class="input-group">
@@ -813,11 +775,26 @@
             <div id="gangs-list"></div>
         </div>
 
-        <!-- 5. قسم القضايا -->
-        <div class="workspace-panel" id="casesSection">
+        <!-- 5. المجلد الجديد الخاص بـ فك التشفير الشفري -->
+        <div class="workspace-panel" id="decryptSection">
             <button class="btn-back" onclick="showHome()">← العودة للرئيسية</button>
-            <h3 style="color:var(--gold-light);">⚖️ القضايا والعقوبات</h3>
-            <p style="font-size:13px; color:var(--text-muted); margin-top:10px;">جميع بيانات القضايا يتم إدارتها وتحديثها عبر التقارير والسجل الجنائي التفاعلي.</p>
+            <h3 style="color:var(--gold-light); margin-bottom:15px;">🔓 وحدة التشفير وفك الشفرات الفدرالية</h3>
+            
+            <div class="crypto-grid">
+                <div class="crypto-box">
+                    <label style="color:var(--accent-cyan); font-weight:bold; font-size:13px;">🔒 تشفير الرسائل والبيانات</label>
+                    <input type="text" id="plainText" placeholder="أدخل النص الأصلي هنا..." style="margin-top:10px;">
+                    <button class="btn-login" style="margin-top:12px; background:var(--accent-blue); color:#fff;" onclick="encryptMsg()">تشفير البيانات</button>
+                </div>
+                <div class="crypto-box">
+                    <label style="color:var(--gold-light); font-weight:bold; font-size:13px;">🔓 فك الشفرة السرية</label>
+                    <input type="text" id="cipherText" placeholder="أدخل الكود أو النص المشفر..." style="margin-top:10px;">
+                    <button class="btn-login" style="margin-top:12px; background:var(--gold-color); color:#000;" onclick="decryptMsg()">فك التشفير الآن</button>
+                </div>
+            </div>
+            <div style="margin-top:20px; padding:15px; background:var(--card-bg); border:1px solid var(--border-color); border-radius:8px; font-size:14px; font-family:var(--font-code);">
+                النتيجة التشفيرية المستخرجة: <b id="cryptoResult" style="color:var(--success-color); letter-spacing:1px;">-</b>
+            </div>
         </div>
 
         <!-- 6. قسم الأعضاء والمتصلون -->
@@ -838,16 +815,16 @@
                 <tbody id="users-table-body"></tbody>
             </table>
         </div>
+
     </div>
 
-    <!-- 3. المزامنة والربط السحابي مع Firebase Firestore -->
+    <!-- المزامنة والربط السحابي مع Firebase Firestore -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
       import { 
         getFirestore, 
         doc, 
         setDoc, 
-        getDoc, 
         onSnapshot 
       } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
@@ -881,18 +858,15 @@
       window.globalDatabase = defaultDatabase;
       window.currentUser = "";
 
-      // حفظ البيانات أونلاين
       window.saveCloudData = async function() {
           try {
               await setDoc(doc(db, "ciaSystem", "mainData"), { payload: JSON.stringify(window.globalDatabase) });
-              console.log("تم الحفظ في الفايربيس بنجاح");
           } catch (e) {
-              console.error("خطأ في حفظ الفايربيس: ", e);
+              console.error("خطأ الفايربيس: ", e);
           }
           window.renderAllData();
       };
 
-      // المزامنة التلقائية واللحظية بين كل المستخدمين
       onSnapshot(doc(db, "ciaSystem", "mainData"), (docSnap) => {
           if (docSnap.exists()) {
               const dataStr = docSnap.data().payload;
@@ -907,49 +881,44 @@
       });
     </script>
 
-    <!-- 4. المؤثرات الصوتية، خلفية Matrix، والتحكم بالفترات الزمنية -->
+    <!-- المؤثرات الصوتية الشفرية والشاشات والتنقل -->
     <script>
-        /* === أ. نظام الصوتيات والمورس ببرمجة Audio Context === */
+        /* نظام الصوتيات ومحاكاة نغمة الهاكر وتشفير الهواتف/المورس */
         const AudioCtx = window.AudioContext || window.webkitAudioContext;
         let audioCtx = null;
 
-        function playMorseBeep() {
+        function playHackerBeep() {
             try {
                 if (!audioCtx) audioCtx = new AudioCtx();
                 if (audioCtx.state === 'suspended') audioCtx.resume();
-
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
-
-                osc.type = 'sine';
-                osc.frequency.value = 750 + Math.random() * 250; // تردد المورس
-                gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-
+                osc.type = 'sawtooth'; // صوت إلكتروني يشبه الاختراق والفك التشفيري
+                osc.frequency.value = 300 + Math.random() * 900;
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
-
                 osc.start();
-                osc.stop(audioCtx.currentTime + 0.06);
+                osc.stop(audioCtx.currentTime + 0.05);
             } catch (e) {}
         }
 
-        // إطلاق نطق الترحيب الفدرالي عند الدخول
-        function playWelcomeSpeech(username) {
+        /* النطق المباشر عند الدخول بدقة: welcome to CIA بدون دوت */
+        function playWelcomeSpeech() {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
-                const text = `Access Granted. Welcome Agent ${username}. CIA Federal Terminal is online.`;
+                const text = "welcome to CIA";
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'en-US';
-                utterance.rate = 0.9;
-                utterance.pitch = 0.95;
+                utterance.rate = 0.95;
+                utterance.pitch = 0.9;
                 window.speechSynthesis.speak(utterance);
             }
         }
 
-        /* === ب. إعداد خلفية الكلام الشفاف المتحرك Matrix === */
+        /* خلفية التشفير المتحركة السي آي إيه والـ Ciphers */
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
-
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -957,7 +926,7 @@
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
-        const chars = "CIA TOP SECRET CLASSIFIED FEDERAL TERMINAL 01010101928374 MUTLEQ KARLOS INTELLIGENCE";
+        const chars = "CIA TOP SECRET CLASSIFIED CIPHER 01010101 KARLOS MUTLEQ INVESTIGATION DECRYPTION CONTROL";
         const fontSize = 12;
         const columns = Math.floor(window.innerWidth / fontSize) + 1;
         const drops = Array(columns).fill(1);
@@ -965,14 +934,11 @@
         function drawMatrix() {
             ctx.fillStyle = "rgba(3, 6, 9, 0.15)";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-
             ctx.fillStyle = "rgba(0, 210, 255, 0.35)";
             ctx.font = fontSize + "px 'JetBrains Mono'";
-
             for (let i = 0; i < drops.length; i++) {
                 const text = chars.charAt(Math.floor(Math.random() * chars.length));
                 ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
                 if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
                     drops[i] = 0;
                 }
@@ -981,7 +947,7 @@
         }
         setInterval(drawMatrix, 40);
 
-        /* === ج. تسجيل الدخول والانتظار الـ 5 ثواني === */
+        /* تسجيل الدخول + مدة 5 ثواني مع صوت الهكر والشفرة */
         function login() {
             const user = document.getElementById("login-username").value.trim();
             const pass = document.getElementById("login-password").value.trim();
@@ -990,9 +956,7 @@
 
             if (globalDatabase.users[user] && globalDatabase.users[user].password === pass && globalDatabase.users[user].pin === pin) {
                 errorMsg.style.display = "none";
-                localStorage.setItem("active_cia_user", user);
-
-                // إظهار شاشة الانتظار
+                
                 const loader = document.getElementById("loader-screen");
                 const fill = document.getElementById("progress-fill");
                 const statusTxt = document.getElementById("loader-status");
@@ -1001,20 +965,20 @@
                 fill.style.width = "0%";
 
                 const statuses = [
-                    "VERIFYING CLEARANCE LEVEL...",
-                    "AUTHENTICATING BIOMETRICS...",
-                    "DECRYPTING DATABASE FILES...",
-                    "CONNECTING TO SATELLITE NETWORK...",
-                    "ACCESS GRANTED - LOADING SYSTEM..."
+                    "DECRYPTING SECURITY CIPHERS...",
+                    "BYPASSING FEDERAL FIREWALL...",
+                    "ANALYZING INVESTIGATION DATA...",
+                    "CONNECTING TO CIA SATELLITES...",
+                    "CIPHER BROKEN - ACCESS GRANTED!"
                 ];
 
                 let progress = 0;
-                let morseInterval = setInterval(playMorseBeep, 130);
+                let soundInterval = setInterval(playHackerBeep, 80); // أصوات شفرة هكر متسارعة
 
                 let interval = setInterval(() => {
-                    progress += 2; // 100% خلال 5 ثوانٍ (50 خطوة كل 100ms)
+                    progress += 2; // 100% خلال 5 ثوانٍ تماماً (50 خطوة كل 100 ملي ثانية)
                     fill.style.width = progress + "%";
-
+                    
                     let statusIdx = Math.floor((progress / 100) * statuses.length);
                     if (statusIdx < statuses.length) {
                         statusTxt.innerText = statuses[statusIdx];
@@ -1022,13 +986,12 @@
 
                     if (progress >= 100) {
                         clearInterval(interval);
-                        clearInterval(morseInterval);
+                        clearInterval(soundInterval);
                         loader.style.display = "none";
                         openMainSystem(user);
-                        playWelcomeSpeech(user);
+                        playWelcomeSpeech();
                     }
                 }, 100);
-
             } else {
                 errorMsg.style.display = "block";
             }
@@ -1040,15 +1003,19 @@
             document.getElementById("main-system").style.display = "block";
             
             document.getElementById("current-user-display").innerText = `${user}`;
+            const userObj = globalDatabase.users[user];
             const roleDisplay = document.getElementById("current-role-display");
-            roleDisplay.innerText = globalDatabase.users[user].role;
+            const btnLeader = document.getElementById("btn-leader-control");
 
-            if (globalDatabase.users[user].role === "DIRECTOR") {
+            roleDisplay.innerText = userObj.role || "CID Member";
+
+            // إظهار نظام التحكم للدايركتور فقط فوق يمين
+            if (userObj.role === "DIRECTOR") {
                 roleDisplay.className = "badge badge-leader";
-                document.getElementById("leader-section").style.display = "block";
+                btnLeader.style.display = "inline-block";
             } else {
                 roleDisplay.className = "badge";
-                document.getElementById("leader-section").style.display = "none";
+                btnLeader.style.display = "none";
             }
 
             renderAllData();
@@ -1071,7 +1038,6 @@
             const citizen = document.getElementById("reportCitizen").value.trim();
             const image = document.getElementById("reportImage").value.trim();
             const video = document.getElementById("reportVideo").value.trim();
-
             if (!title || !details) return alert("يرجى كتابة عنوان وتفاصيل التقرير!");
             
             globalDatabase.reports.push({
@@ -1080,7 +1046,6 @@
                 author: currentUser,
                 date: new Date().toLocaleTimeString('ar-EG')
             });
-
             addLog(`قام [${currentUser}] بإضافة تقرير جديد: ${title}`);
             document.getElementById("reportTitle").value = "";
             document.getElementById("reportDetails").value = "";
@@ -1093,7 +1058,6 @@
         async function editReport(id) {
             const item = globalDatabase.reports.find(r => r.id === id);
             if (!item) return;
-
             const newTitle = prompt("تعديل عنوان التقرير:", item.title);
             if (newTitle === null) return;
             const newDetails = prompt("تعديل التفاصيل:", item.details);
@@ -1121,7 +1085,6 @@
             const q = (document.getElementById("reportSearch")?.value || "").toLowerCase();
             if (!list) return;
             list.innerHTML = "";
-
             globalDatabase.reports.filter(r => 
                 (r.title && r.title.toLowerCase().includes(q)) || 
                 (r.details && r.details.toLowerCase().includes(q)) || 
@@ -1149,9 +1112,7 @@
             const name = document.getElementById("wantedName").value.trim();
             const risk = document.getElementById("wantedRisk").value.trim();
             const crime = document.getElementById("wantedCrime").value.trim();
-
             if (!name || !crime) return alert("يرجى تعبئة بيانات المطلوب!");
-
             globalDatabase.wanted.push({ id: Date.now(), name, risk: risk || "مطلوب", crime });
             addLog(`قام [${currentUser}] بإضافة مطلوب جديد: ${name}`);
             
@@ -1164,18 +1125,15 @@
         async function editWanted(id) {
             const item = globalDatabase.wanted.find(w => w.id === id);
             if (!item) return;
-
             const newName = prompt("تعديل اسم المطلوب:", item.name);
             if (newName === null) return;
             const newRisk = prompt("تعديل مستوى الخطورة:", item.risk);
             if (newRisk === null) return;
             const newCrime = prompt("تعديل التهم:", item.crime);
             if (newCrime === null) return;
-
             item.name = newName;
             item.risk = newRisk;
             item.crime = newCrime;
-
             addLog(`قام [${currentUser}] بتعديل بيانات المطلوب: ${item.name}`);
             await saveCloudData();
         }
@@ -1193,7 +1151,6 @@
             const q = (document.getElementById("wantedSearch")?.value || "").toLowerCase();
             if (!list) return;
             list.innerHTML = "";
-
             globalDatabase.wanted.filter(w => 
                 (w.name && w.name.toLowerCase().includes(q)) || 
                 (w.crime && w.crime.toLowerCase().includes(q)) || 
@@ -1221,12 +1178,9 @@
             const name = document.getElementById("recName").value.trim();
             const cid = document.getElementById("recId").value.trim();
             const notes = document.getElementById("recNotes").value.trim();
-
             if (!name) return alert("يرجى كتابة اسم المواطن!");
-
             globalDatabase.records.push({ id: Date.now(), name, cid: cid || "N/A", notes });
             addLog(`قام [${currentUser}] بإنشاء ملف سجلي لـ: ${name}`);
-
             document.getElementById("recName").value = "";
             document.getElementById("recId").value = "";
             document.getElementById("recNotes").value = "";
@@ -1236,18 +1190,15 @@
         async function editRecord(id) {
             const item = globalDatabase.records.find(r => r.id === id);
             if (!item) return;
-
             const newName = prompt("تعديل اسم المواطن:", item.name);
             if (newName === null) return;
             const newCid = prompt("تعديل المعرف (Citizen ID):", item.cid);
             if (newCid === null) return;
             const newNotes = prompt("تعديل الملاحظات والقضايا:", item.notes);
             if (newNotes === null) return;
-
             item.name = newName;
             item.cid = newCid;
             item.notes = newNotes;
-
             addLog(`قام [${currentUser}] بتعديل سجلاً جنائياً لـ: ${item.name}`);
             await saveCloudData();
         }
@@ -1264,7 +1215,6 @@
             const q = (document.getElementById("recordsSearch")?.value || "").toLowerCase();
             if (!list) return;
             list.innerHTML = "";
-
             globalDatabase.records.filter(r => 
                 (r.name && r.name.toLowerCase().includes(q)) || 
                 (r.cid && r.cid.toLowerCase().includes(q)) || 
@@ -1288,12 +1238,9 @@
         async function addGang() {
             const name = document.getElementById("gangName").value.trim();
             const details = document.getElementById("gangDetails").value.trim();
-
             if (!name) return alert("يرجى كتابة اسم العصابة!");
-
             globalDatabase.gangs.push({ id: Date.now(), name, details });
             addLog(`قام [${currentUser}] بإضافة مخطط عصابة: ${name}`);
-
             document.getElementById("gangName").value = "";
             document.getElementById("gangDetails").value = "";
             await saveCloudData();
@@ -1302,15 +1249,12 @@
         async function editGang(id) {
             const item = globalDatabase.gangs.find(g => g.id === id);
             if (!item) return;
-
             const newName = prompt("تعديل اسم العصابة:", item.name);
             if (newName === null) return;
             const newDetails = prompt("تعديل التفاصيل:", item.details);
             if (newDetails === null) return;
-
             item.name = newName;
             item.details = newDetails;
-
             addLog(`قام [${currentUser}] بتعديل مخطط عصابة: ${item.name}`);
             await saveCloudData();
         }
@@ -1327,7 +1271,6 @@
             const q = (document.getElementById("gangsSearch")?.value || "").toLowerCase();
             if (!list) return;
             list.innerHTML = "";
-
             globalDatabase.gangs.filter(g => 
                 (g.name && g.name.toLowerCase().includes(q)) || 
                 (g.details && g.details.toLowerCase().includes(q))
@@ -1346,24 +1289,36 @@
             });
         }
 
-        /* إدارة الحسابات والأعضاء */
+        /* نظام الرتب وإدارة الحسابات للدايركتور */
         async function createAccount() {
             const user = document.getElementById("new-username").value.trim();
             const id = document.getElementById("new-id").value.trim();
             const pass = document.getElementById("new-password").value.trim();
             const pin = document.getElementById("new-pin").value.trim();
+            const role = document.getElementById("new-role").value;
 
             if (!user || !id || !pass || !pin) return alert("يرجى تعبئة جميع الحقول!");
-
-            globalDatabase.users[user] = { password: pass, pin: pin, id: id, role: "SPECIAL AGENT" };
-            addLog(`تم إنشاء حساب جديد لـ: ${user}`);
+            
+            globalDatabase.users[user] = { password: pass, pin: pin, id: id, role: role };
+            addLog(`تم تحديث/إنشاء حساب لـ: ${user} بالرتبة: (${role})`);
             await saveCloudData();
-            alert(`تم إضافة الحساب (${user}) أونلاين بنجاح!`);
+            alert(`تم حفظ الحساب والرتبة لـ (${user}) أونلاين بنجاح!`);
+        }
+
+        async function editUserRole(username) {
+            const u = globalDatabase.users[username];
+            if (!u) return;
+            const newRole = prompt(`تعديل رتبة (${username}):\n(اختر: DIRECTOR, FIELD COMMANDER, SENIOR AGENT, SPECIAL AGENT, CID Member)`, u.role);
+            if (newRole) {
+                u.role = newRole;
+                addLog(`تم تعديل رتبة [${username}] إلى ${newRole}`);
+                await saveCloudData();
+            }
         }
 
         async function deleteAccount(username) {
-            if (username === "Karlos") return alert("لا يمكنك حذف المدير!");
-            if (confirm(`حذف (${username})؟`)) {
+            if (username === "Karlos") return alert("لا يمكنك حذف المدير العام!");
+            if (confirm(`حذف حساب (${username}) نهائياً؟`)) {
                 delete globalDatabase.users[username];
                 await saveCloudData();
             }
@@ -1373,26 +1328,26 @@
             const container = document.getElementById("users-container");
             const tbody = document.getElementById("users-table-body");
             const q = (document.getElementById("usersSearch")?.value || "").toLowerCase();
-
             if (container) container.innerHTML = "";
             if (tbody) tbody.innerHTML = "";
 
             for (let user in globalDatabase.users) {
                 const u = globalDatabase.users[user];
-                if (user.toLowerCase().includes(q) || u.id.toLowerCase().includes(q) || u.role.toLowerCase().includes(q)) {
+                if (user.toLowerCase().includes(q) || u.id.toLowerCase().includes(q) || (u.role && u.role.toLowerCase().includes(q))) {
                     if (tbody) {
                         const tr = document.createElement("tr");
-                        tr.innerHTML = `<td>${user}</td><td>${u.id}</td><td>${u.role}</td>`;
+                        tr.innerHTML = `<td>${user}</td><td>${u.id}</td><td><span class="badge">${u.role || 'CID Member'}</span></td>`;
                         tbody.appendChild(tr);
                     }
                     if (container) {
                         const div = document.createElement("div");
                         div.className = "user-list-item";
                         div.innerHTML = `
-                            <div><b>${user}</b> (${u.id}) - <small style="color:var(--gold-light);">${u.role}</small></div>
+                            <div><b>${user}</b> (${u.id}) - <small style="color:var(--gold-light); font-weight:bold;">${u.role || 'CID Member'}</small></div>
                             <div>
                                 <small style="color:var(--text-muted); font-family:var(--font-code); margin-left:10px;">Pass: ${u.password} | PIN: ${u.pin}</small>
-                                ${u.role !== 'DIRECTOR' ? `<button class="btn-del-item" style="position:static;" onclick="deleteAccount('${user}')">حذف</button>` : ''}
+                                <button class="btn-edit-item" style="position:static; display:inline-block; margin-left:5px;" onclick="editUserRole('${user}')">تعديل الرتبة</button>
+                                ${user !== 'Karlos' ? `<button class="btn-del-item" style="position:static; display:inline-block;" onclick="deleteAccount('${user}')">حذف</button>` : ''}
                             </div>
                         `;
                         container.appendChild(div);
@@ -1401,7 +1356,7 @@
             }
         }
 
-        /* السجل الميداني (Log) */
+        /* Log */
         function addLog(text) {
             const time = new Date().toLocaleTimeString('ar-EG');
             globalDatabase.logs.unshift(`[${time}] ${text}`);
@@ -1416,7 +1371,7 @@
             }
         }
 
-        /* التنقل بين الشاشات */
+        /* الشاشات */
         function showHome() {
             document.getElementById("folderHome").style.display = "block";
             const panels = document.querySelectorAll('.workspace-panel');
@@ -1425,11 +1380,13 @@
 
         function openSection(sectionId) {
             document.getElementById("folderHome").style.display = "none";
+            const panels = document.querySelectorAll('.workspace-panel');
+            panels.forEach(p => p.style.display = 'none');
             const target = document.getElementById(sectionId);
             if (target) target.style.display = "block";
         }
 
-        /* التشفير وفك التشفير */
+        /* التشفير */
         function encryptMsg() {
             const val = document.getElementById("plainText").value.trim();
             if (!val) return;
@@ -1441,11 +1398,10 @@
             if (!val) return;
             try {
                 document.getElementById("cryptoResult").innerText = decodeURIComponent(escape(atob(val)));
-            } catch (e) { document.getElementById("cryptoResult").innerText = "كود خاطئ!"; }
+            } catch (e) { document.getElementById("cryptoResult").innerText = "كود شفرة غير صحيح!"; }
         }
 
         function logout() {
-            localStorage.removeItem("active_cia_user");
             document.getElementById("login-screen").style.display = "block";
             document.getElementById("main-system").style.display = "none";
         }
