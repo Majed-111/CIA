@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CIA FEDERAL DATA TERMINAL | نظام التحكم والاستخبارات الفدرالي</title>
+    <title>SWAT SPECIAL TACTICS TERMINAL | نظام التحكم والعمليات الخاصة</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -74,7 +74,7 @@
             100% { opacity: 0.05; transform: translate(-50%, -50%) scale(1.02); }
         }
 
-        /* 1. شاشة النقر البدائية لتفعيل الصوت بموافقة المتصفح */
+        /* 1. شاشة النقر المباشر لبدء تشغيل الأصوات SWAT */
         #start-prompt-screen {
             display: flex;
             position: fixed;
@@ -107,7 +107,7 @@
             box-shadow: 0 0 35px rgba(0, 210, 255, 0.6);
         }
 
-        /* 2. شاشة التحميل والتحقيق الفيدرالية */
+        /* 2. شاشة التحميل والتحقيق الفيدرالية SWAT */
         #loader-screen {
             display: none;
             position: fixed;
@@ -172,7 +172,7 @@
             letter-spacing: 1px;
         }
 
-        /* 3. شاشة تسجيل الدخول الأصلي */
+        /* 3. شاشة تسجيل الدخول SWAT */
         .login-card {
             display: none;
             position: relative;
@@ -217,10 +217,9 @@
             box-shadow: 0 0 25px rgba(197, 160, 89, 0.3);
         }
         .logo-container img {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            object-fit: cover;
+            width: 85px;
+            height: 85px;
+            object-fit: contain;
         }
         .title {
             color: var(--gold-light);
@@ -314,7 +313,7 @@
             font-family: var(--font-code);
         }
 
-        /* 4. النظام الداخلي التكتيكي */
+        /* 4. النظام الداخلي SWAT */
         #main-system {
             display: none;
             position: relative;
@@ -626,38 +625,38 @@
 <body>
     <!-- خلفية الكود المتحرك -->
     <canvas id="bg-canvas"></canvas>
-    <div class="bg-watermark">CIA</div>
+    <div class="bg-watermark">SWAT</div>
 
-    <!-- 1. شاشة النقر المباشر لبدء تشغيل الأصوات والتحميل بموافقة المتصفح -->
+    <!-- 1. شاشة النقر المباشر SWAT لبدء تشغيل الأصوات -->
     <div id="start-prompt-screen">
-        <div class="logo-container" style="width:120px; height:120px;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/25/Seal_of_the_Central_Intelligence_Agency.svg" alt="CIA Seal">
+        <div class="logo-container" style="width:130px; height:130px; border-color:var(--gold-color);">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/SWAT_badge.svg/512px-SWAT_badge.svg.png" alt="SWAT Badge">
         </div>
-        <h2 style="color:var(--gold-light); font-weight:800; margin-top:15px;">CIA FEDERAL TERMINAL</h2>
-        <p style="color:var(--accent-cyan); font-size:14px; margin-top:8px;">اضغط على الزر أدناه لبدء الاتصال وتفعيل النظام الصوتي والتشفير الميداني</p>
-        <button class="btn-start-sound" onclick="startSystemWithAudio()">🔊 بدء الاتصال بالمنظومة الفيدرالية</button>
+        <h2 style="color:var(--gold-light); font-weight:800; margin-top:15px; letter-spacing:1px;">SWAT SPECIAL OPERATIONS TERMINAL</h2>
+        <p style="color:var(--accent-cyan); font-size:14px; margin-top:8px;">اضغط على الزر أدناه لبدء الاتصال بالمنظومة التكتيكية لتفعيل نظام الصوت والتشغيل</p>
+        <button class="btn-start-sound" onclick="startSystemWithAudio()">🔊 بدء الاتصال بفرقة SWAT</button>
     </div>
 
-    <!-- 2. شاشة الانتظار والفك التشفيري بعد النقر -->
+    <!-- 2. شاشة الانتظار والفك التشفيري SWAT -->
     <div id="loader-screen">
         <div class="loader-spinner"></div>
-        <h3 class="loader-title">CONNECTING TO FEDERAL SYSTEM...</h3>
-        <div class="loader-sub-ar">جار الاتصال بالمنظومة الفيدرالية...</div>
+        <h3 class="loader-title">CONNECTING TO SWAT TACTICAL SYSTEM...</h3>
+        <div class="loader-sub-ar">جار الاتصال بالمنظومة التكتيكية...</div>
         <div class="progress-bar-container">
             <div class="progress-bar-fill" id="progress-fill"></div>
         </div>
-        <div class="loader-status-text" id="loader-status">ESTABLISHING ENCRYPTED LINK...</div>
+        <div class="loader-status-text" id="loader-status">ESTABLISHING TACTICAL ENCRYPTED LINK...</div>
     </div>
 
-    <!-- 3. شاشة تسجيل الدخول الرئيسي -->
+    <!-- 3. شاشة تسجيل الدخول SWAT -->
     <div class="login-card" id="login-screen">
-        <div class="subtitle-top">CIA • FEDERAL DATA TERMINAL</div>
+        <div class="subtitle-top">SWAT • SPECIAL TACTICS TERMINAL</div>
         
         <div class="logo-container">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/25/Seal_of_the_Central_Intelligence_Agency.svg" alt="CIA Emblem">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/SWAT_badge.svg/512px-SWAT_badge.svg.png" alt="SWAT Emblem">
         </div>
-        <div class="title">CIA FEDERAL SYSTEM</div>
-        <div class="agency-name">CENTRAL INTELLIGENCE AGENCY</div>
+        <div class="title">SWAT TACTICAL SYSTEM</div>
+        <div class="agency-name">SPECIAL WEAPONS AND TACTICS</div>
         
         <div class="input-group">
             <label>معرف الوكيل / اسم المستخدم (Username)</label>
@@ -672,22 +671,22 @@
             <input type="password" id="login-pin" placeholder="••••" autocomplete="off">
         </div>
         
-        <button class="btn-login" onclick="login()">تسجيل الدخول للمنظومة الفدرالية</button>
-        <div class="federal-footer-text">اتصال بالمنظومة الفيدرالية</div>
+        <button class="btn-login" onclick="login()">تسجيل الدخول لمنظومة SWAT</button>
+        <div class="federal-footer-text">اتصال آمن بقطاع العمليات SWAT</div>
         <div class="sync-status" id="loading-status">🔄 جاري الاتصال بالفايربيس...</div>
         <div class="error-msg" id="error-msg">⚠️ خطأ: اسم المستخدم، كلمة السر، أو الرمز غير صحيح!</div>
     </div>
 
-    <!-- 4. النظام الداخلي التكتيكي -->
+    <!-- 4. النظام الداخلي التكتيكي SWAT -->
     <div id="main-system">
         
         <!-- الهيدر العلوي -->
         <div class="header-system">
             <div>
-                <h3 style="margin:0; color:var(--gold-light); font-size:18px; font-weight:800;">🛡️ CIA SYSTEM | نظام التحكم والاستخبارات</h3>
+                <h3 style="margin:0; color:var(--gold-light); font-size:18px; font-weight:800;">⚔️ SWAT SYSTEM | نظام العمليات الخاصة والتحكم</h3>
                 <small style="color:var(--text-muted); font-size:12px;">
-                    العضو: <span id="current-user-display" style="color:var(--accent-cyan); font-weight:bold;">Agent</span> 
-                    | الرتبة: <span id="current-role-display" class="badge">CID Member</span>
+                    العضو: <span id="current-user-display" style="color:var(--accent-cyan); font-weight:bold;">Operator</span> 
+                    | الرتبة: <span id="current-role-display" class="badge">SWAT Member</span>
                 </small>
             </div>
             <div class="header-actions">
@@ -698,7 +697,7 @@
 
         <!-- شبكة المجلدات الستة -->
         <div class="folder-grid-panel" id="folderHome">
-            <div class="grid-title">سطح مكتب نظام CIA</div>
+            <div class="grid-title">سطح مكتب نظام SWAT</div>
             <small style="color:var(--text-muted)">اختر مجلداً لفتح القسم الخاص به</small>
             <div class="folder-grid">
                 <div class="folder-card" onclick="openSection('reportsSection')">
@@ -733,28 +732,28 @@
                 </div>
             </div>
             <div style="margin-top: 25px; border-top: 1px solid var(--border-color); padding-top: 12px; font-size: 11px; color: var(--text-muted); font-family: var(--font-code);">
-                BY KARLOS SEIFEDDINE | CIA FEDERAL DATA TERMINAL
+                BY KARLOS SEIFEDDINE | SWAT TACTICAL DATA TERMINAL
             </div>
         </div>
 
-        <!-- قسم نظام التحكم وإدارة الرتب والأنظمة (خاص برتبة DIRECTOR) -->
+        <!-- قسم نظام التحكم وإدارة الرتب (SWAT COMMANDER CONTROL) -->
         <div class="workspace-panel leader-panel" id="leaderControlSection">
             <button class="btn-back" onclick="showHome()">← العودة للرئيسية</button>
-            <h3 style="color:var(--gold-light); margin-top:0;">👑 مركز نظام التحكم وإدارة الرتب (DIRECTOR CONTROL)</h3>
+            <h3 style="color:var(--gold-light); margin-top:0;">👑 مركز نظام التحكم وإدارة الرتب (SWAT COMMAND CONTROL)</h3>
             <p style="font-size:12px; color:var(--text-muted); margin-bottom: 15px;">إضافة حسابات جديدة وتعيين الرتب والتعديل عليها أونلاين:</p>
             
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
-                <div class="input-group"><label>اسم الوكيل</label><input type="text" id="new-username" placeholder="Username..."></div>
-                <div class="input-group"><label>المعرف (Badge ID)</label><input type="text" id="new-id" placeholder="CIA-709"></div>
+                <div class="input-group"><label>اسم المشغل</label><input type="text" id="new-username" placeholder="Username..."></div>
+                <div class="input-group"><label>المعرف (Badge ID)</label><input type="text" id="new-id" placeholder="SWAT-709"></div>
                 <div class="input-group"><label>كلمة المرور</label><input type="text" id="new-password" placeholder="Passcode..."></div>
                 <div class="input-group"><label>رمز PIN</label><input type="text" id="new-pin" placeholder="PIN..."></div>
                 <div class="input-group">
                     <label>الرتبة الممنوحة</label>
                     <select id="new-role">
-                        <option value="CID Member">CID Member</option>
-                        <option value="SPECIAL AGENT">SPECIAL AGENT</option>
-                        <option value="SENIOR AGENT">SENIOR AGENT</option>
-                        <option value="FIELD COMMANDER">FIELD COMMANDER</option>
+                        <option value="SWAT Member">SWAT Member</option>
+                        <option value="TACTICAL OPERATOR">TACTICAL OPERATOR</option>
+                        <option value="SENIOR OPERATOR">SENIOR OPERATOR</option>
+                        <option value="SWAT COMMANDER">SWAT COMMANDER</option>
                         <option value="DIRECTOR">DIRECTOR</option>
                     </select>
                 </div>
@@ -775,7 +774,7 @@
             </div>
             <div class="input-group"><label>عنوان التقرير</label><input type="text" id="reportTitle" placeholder="عنوان التقرير..."></div>
             <div class="input-group"><label>تفاصيل التقرير</label><textarea id="reportDetails" rows="3" placeholder="تفاصيل التقرير..."></textarea></div>
-            <div class="input-group"><label>Citizen ID المرتبط بالتقرير</label><input type="text" id="reportCitizen" placeholder="مثال: CIA-102"></div>
+            <div class="input-group"><label>Citizen ID المرتبط بالتقرير</label><input type="text" id="reportCitizen" placeholder="مثال: SWAT-102"></div>
             <div class="input-group"><label>رابط صورة كدليل (اختياري)</label><input type="text" id="reportImage" placeholder="https://example.com/image.jpg"></div>
             <div class="input-group"><label>رابط فيديو كدليل (اختياري)</label><input type="text" id="reportVideo" placeholder="https://example.com/video.mp4"></div>
             <button class="btn-login" style="background:linear-gradient(135deg, var(--accent-blue), #0052a3); color:#fff; font-weight:bold; margin-bottom:20px;" onclick="addReport()">إرسال وحفظ التقرير أونلاين</button>
@@ -812,7 +811,7 @@
             </div>
             <div style="background:var(--card-bg); padding:18px; border-radius:8px; margin-bottom:20px; border:1px solid var(--border-color);">
                 <div class="input-group"><label>اسم المواطن</label><input type="text" id="recName" placeholder="John Doe"></div>
-                <div class="input-group"><label>Citizen ID</label><input type="text" id="recId" placeholder="CIA-102"></div>
+                <div class="input-group"><label>Citizen ID</label><input type="text" id="recId" placeholder="SWAT-102"></div>
                 <div class="input-group"><label>سجل الملاحظات والقضايا</label><textarea id="recNotes" rows="2" placeholder="الملاحظات..."></textarea></div>
                 <button class="btn-login" style="background:var(--gold-color); color:#000;" onclick="addRecord()">+ إضافة ملف جديد للسجل</button>
             </div>
@@ -835,10 +834,10 @@
             <div id="gangs-list"></div>
         </div>
 
-        <!-- 5. المجلد الخاص بـ فك التشفير الشفري -->
+        <!-- 5. فك التشفير SWAT -->
         <div class="workspace-panel" id="decryptSection">
             <button class="btn-back" onclick="showHome()">← العودة للرئيسية</button>
-            <h3 style="color:var(--gold-light); margin-bottom:15px;">🔓 وحدة التشفير وفك الشفرات الفدرالية</h3>
+            <h3 style="color:var(--gold-light); margin-bottom:15px;">🔓 وحدة التشفير وفك الشفرات التكتيكية SWAT</h3>
             
             <div class="crypto-grid">
                 <div class="crypto-box">
@@ -857,17 +856,17 @@
             </div>
         </div>
 
-        <!-- 6. قسم الأعضاء والمتصلون -->
+        <!-- 6. قسم الأعضاء والمتصلون SWAT -->
         <div class="workspace-panel" id="usersSection">
             <button class="btn-back" onclick="showHome()">← العودة للرئيسية</button>
-            <h3 style="color:var(--gold-light); margin-bottom: 15px;">👥 قائمة الأعضاء المسجلين بالمنظومة</h3>
+            <h3 style="color:var(--gold-light); margin-bottom: 15px;">👥 قائمة المشغلين والأعضاء المسجلين بالمنظومة</h3>
             <div class="input-group">
                 <input type="text" id="usersSearch" class="search-box" placeholder="🔍 بحث في قائمة الأعضاء..." oninput="renderUsers()">
             </div>
             <table>
                 <thead>
                     <tr>
-                        <th>اسم الوكيل</th>
+                        <th>اسم الوكيل / المشغل</th>
                         <th>المعرف</th>
                         <th>الرتبة</th>
                     </tr>
@@ -902,16 +901,16 @@
 
       let defaultDatabase = {
           users: {
-              "Karlos": { password: "admin", pin: "0000", id: "CIA-001", role: "DIRECTOR" },
-              "Mutleq": { password: "123", pin: "1234", id: "CIA-102", role: "CID Member" }
+              "Karlos": { password: "admin", pin: "0000", id: "SWAT-001", role: "DIRECTOR" },
+              "Mutleq": { password: "123", pin: "1234", id: "SWAT-102", role: "SWAT Member" }
           },
           reports: [],
           wanted: [
-              { id: 1, name: "MARK", risk: "خطر جداً", crime: "التهمة مطلوب وبشكل خطر على القطاعات الفدرالية..." }
+              { id: 1, name: "MARK", risk: "خطر جداً", crime: "التهمة مطلوب وبشكل خطر على القطاعات التكتيكية..." }
           ],
           records: [],
           gangs: [],
-          logs: ["[SYSTEM READY]: تم الاتصال بالسحابة الفدرالية."]
+          logs: ["[SWAT SYSTEM READY]: تم الاتصال بالسحابة التكتيكية."]
       };
 
       window.globalDatabase = defaultDatabase;
@@ -931,7 +930,7 @@
               const dataStr = docSnap.data().payload;
               if (dataStr) {
                   window.globalDatabase = JSON.parse(dataStr);
-                  document.getElementById("loading-status").innerText = "✅ متصل بالمنظومة الفدرالية (Firebase Live)";
+                  document.getElementById("loading-status").innerText = "✅ متصل بالمنظومة التكتيكية SWAT (Firebase Live)";
                   window.renderAllData();
               }
           } else {
@@ -940,7 +939,7 @@
       });
     </script>
 
-    <!-- محرك الصوت الشامل والشاشات -->
+    <!-- محرك الصوت التكتيكي ومرحب SWAT -->
     <script>
         const AudioCtx = window.AudioContext || window.webkitAudioContext;
         let audioCtx = null;
@@ -949,20 +948,19 @@
             document.getElementById("start-prompt-screen").style.display = "none";
             document.getElementById("loader-screen").style.display = "flex";
 
-            // تفعيل محرك الصوت بمجرد الضغط
             if (!audioCtx) audioCtx = new AudioCtx();
             if (audioCtx.state === 'suspended') audioCtx.resume();
 
             runLoaderSequence();
         }
 
-        /* توليد وتشغيل أصوات شفرات هكر + تشويش راديو لاسلكي + همهمات عملاء بمكتب Operations */
+        /* الأصوات الميدانية SWAT */
         function playTacticalAudioPulse() {
             try {
                 if (!audioCtx) return;
                 const t = audioCtx.currentTime;
 
-                // 1. صوت شفرة/بيپ إلكتروني متسارع (Beep Oscillators)
+                // 1. صوت شفرة/بيپ
                 const oscCode = audioCtx.createOscillator();
                 const gainCode = audioCtx.createGain();
                 oscCode.type = 'sawtooth';
@@ -973,7 +971,7 @@
                 oscCode.start(t);
                 oscCode.stop(t + 0.05);
 
-                // 2. صوت تشويش راديو اللاسلكي الفيدرالي (Radio Static Noise)
+                // 2. صوت تشويش اللاسلكي SWAT
                 const bufSize = audioCtx.sampleRate * 0.1;
                 const buffer = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
                 const outData = buffer.getChannelData(0);
@@ -992,7 +990,7 @@
                 noiseGain.connect(audioCtx.destination);
                 staticNoise.start(t);
 
-                // 3. أصوات همهمات وسوالف العملاء بالمكتب من مسافة (Office Murmur Background)
+                // 3. همهمات ومحادثات الميدان والمكتب SWAT
                 if (Math.random() > 0.3) {
                     const murmurOsc = audioCtx.createOscillator();
                     const murmurGain = audioCtx.createGain();
@@ -1017,10 +1015,11 @@
             } catch (e) {}
         }
 
+        /* الترحيب الصوتي بـ SWAT */
         function playWelcomeSpeech() {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
-                const text = "welcome to CIA";
+                const text = "welcome to SWAT";
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'en-US';
                 utterance.rate = 0.95;
@@ -1029,7 +1028,7 @@
             }
         }
 
-        /* خلفية التشفير المتحركة */
+        /* خلفية الماتريكس التكتيكية */
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         function resizeCanvas() {
@@ -1039,7 +1038,7 @@
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
-        const chars = "CIA TOP SECRET CLASSIFIED CIPHER 01010101 KARLOS MUTLEQ INVESTIGATION DECRYPTION CONTROL";
+        const chars = "SWAT TACTICAL CLASSIFIED SPECIAL WEAPONS 01010101 KARLOS MUTLEQ OPERATIONS CONTROL";
         const fontSize = 12;
         const columns = Math.floor(window.innerWidth / fontSize) + 1;
         const drops = Array(columns).fill(1);
@@ -1061,7 +1060,7 @@
         }
         setInterval(drawMatrix, 40);
 
-        /* تشغيل سلسلة التحميل 5 ثوانٍ بعد الضغط */
+        /* تشغيل سلسلة تحميل SWAT */
         function runLoaderSequence() {
             const loader = document.getElementById("loader-screen");
             const fill = document.getElementById("progress-fill");
@@ -1069,14 +1068,14 @@
             
             fill.style.width = "0%";
             const statuses = [
-                "DECRYPTING SECURITY CIPHERS...",
-                "CONNECTING TO CIA RADIAL NETWORK...",
-                "ANALYZING INVESTIGATION DATA...",
-                "CONNECTING TO CIA SATELLITES...",
+                "DECRYPTING SWAT CIPHERS...",
+                "CONNECTING TO SWAT RADIAL NETWORK...",
+                "ANALYZING TACTICAL OPERATIONS...",
+                "CONNECTING TO SWAT COMBAT SATELLITES...",
                 "CIPHER BROKEN - ACCESS GRANTED!"
             ];
             let progress = 0;
-            let soundInterval = setInterval(playTacticalAudioPulse, 70); // أصوات شفرات وراديو وسوالف مكررة
+            let soundInterval = setInterval(playTacticalAudioPulse, 70);
             
             let interval = setInterval(() => {
                 progress += 2;
@@ -1090,13 +1089,13 @@
                     clearInterval(interval);
                     clearInterval(soundInterval);
                     loader.style.display = "none";
-                    document.getElementById("login-screen").style.display = "block"; // فتح شاشة تسجيل الدخول
+                    document.getElementById("login-screen").style.display = "block";
                     playWelcomeSpeech();
                 }
             }, 100);
         }
 
-        /* تسجيل الدخول والعمليات الداخلي */
+        /* تسجيل الدخول والعمليات */
         function login() {
             const user = document.getElementById("login-username").value.trim();
             const pass = document.getElementById("login-password").value.trim();
@@ -1120,9 +1119,9 @@
             const userObj = globalDatabase.users[user];
             const roleDisplay = document.getElementById("current-role-display");
             const btnLeader = document.getElementById("btn-leader-control");
-            roleDisplay.innerText = userObj.role || "CID Member";
+            roleDisplay.innerText = userObj.role || "SWAT Member";
 
-            if (userObj.role === "DIRECTOR") {
+            if (userObj.role === "DIRECTOR" || userObj.role === "SWAT COMMANDER") {
                 roleDisplay.className = "badge badge-leader";
                 btnLeader.style.display = "inline-block";
             } else {
@@ -1142,7 +1141,7 @@
             renderLogs();
         }
 
-        /* التقارير والمطلوبون والسجلات */
+        /* إدارة الملفات */
         async function addReport() {
             const title = document.getElementById("reportTitle").value.trim();
             const details = document.getElementById("reportDetails").value.trim();
@@ -1414,7 +1413,7 @@
         async function editUserRole(username) {
             const u = globalDatabase.users[username];
             if (!u) return;
-            const newRole = prompt(`تعديل رتبة (${username}):\n(اختر: DIRECTOR, FIELD COMMANDER, SENIOR AGENT, SPECIAL AGENT, CID Member)`, u.role);
+            const newRole = prompt(`تعديل رتبة (${username}):\n(اختر: DIRECTOR, SWAT COMMANDER, SENIOR OPERATOR, TACTICAL OPERATOR, SWAT Member)`, u.role);
             if (newRole) {
                 u.role = newRole;
                 addLog(`تم تعديل رتبة [${username}] إلى ${newRole}`);
@@ -1423,7 +1422,7 @@
         }
 
         async function deleteAccount(username) {
-            if (username === "Karlos") return alert("لا يمكنك حذف المدير العام!");
+            if (username === "Karlos") return alert("لا يمكنك حذف قائد المنظومة!");
             if (confirm(`حذف حساب (${username}) نهائياً؟`)) {
                 delete globalDatabase.users[username];
                 await saveCloudData();
@@ -1442,14 +1441,14 @@
                 if (user.toLowerCase().includes(q) || u.id.toLowerCase().includes(q) || (u.role && u.role.toLowerCase().includes(q))) {
                     if (tbody) {
                         const tr = document.createElement("tr");
-                        tr.innerHTML = `<td>${user}</td><td>${u.id}</td><td><span class="badge">${u.role || 'CID Member'}</span></td>`;
+                        tr.innerHTML = `<td>${user}</td><td>${u.id}</td><td><span class="badge">${u.role || 'SWAT Member'}</span></td>`;
                         tbody.appendChild(tr);
                     }
                     if (container) {
                         const div = document.createElement("div");
                         div.className = "user-list-item";
                         div.innerHTML = `
-                            <div><b>${user}</b> (${u.id}) - <small style="color:var(--gold-light); font-weight:bold;">${u.role || 'CID Member'}</small></div>
+                            <div><b>${user}</b> (${u.id}) - <small style="color:var(--gold-light); font-weight:bold;">${u.role || 'SWAT Member'}</small></div>
                             <div>
                                 <small style="color:var(--text-muted); font-family:var(--font-code); margin-left:10px;">Pass: ${u.password} | PIN: ${u.pin}</small>
                                 <button class="btn-edit-item" style="position:static; display:inline-block; margin-left:5px;" onclick="editUserRole('${user}')">تعديل الرتبة</button>
