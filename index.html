@@ -7,20 +7,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #04070a;
-            --panel-bg: rgba(11, 17, 26, 0.85);
-            --card-bg: rgba(15, 23, 36, 0.6);
+            --bg-color: #030609;
+            --panel-bg: rgba(10, 16, 26, 0.88);
+            --card-bg: rgba(15, 23, 36, 0.65);
             --input-bg: #070c14;
             --accent-cyan: #00d2ff;
             --accent-blue: #0084ff;
             --gold-color: #c5a059;
             --gold-light: #e5c178;
-            --border-color: rgba(197, 160, 89, 0.2);
-            --border-glow: rgba(0, 210, 255, 0.3);
+            --border-color: rgba(197, 160, 89, 0.25);
+            --border-glow: rgba(0, 210, 255, 0.4);
             --text-main: #e2e8f0;
             --text-muted: #64748b;
             --danger-color: #ff3344;
-            --danger-bg: rgba(255, 51, 68, 0.1);
+            --danger-bg: rgba(255, 51, 68, 0.12);
             --success-color: #10b981;
             --font-main: 'Tajawal', sans-serif;
             --font-code: 'JetBrains Mono', monospace;
@@ -36,10 +36,6 @@
 
         body {
             background-color: var(--bg-color);
-            background-image: 
-                radial-gradient(circle at 50% 0%, rgba(0, 132, 255, 0.08) 0%, transparent 70%),
-                radial-gradient(circle at 80% 80%, rgba(197, 160, 89, 0.05) 0%, transparent 50%),
-                linear-gradient(to bottom, rgba(4, 7, 10, 0.95), rgba(4, 7, 10, 0.98));
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
@@ -47,20 +43,112 @@
             align-items: center;
             padding: 20px;
             overflow-x: hidden;
+            position: relative;
         }
 
-        /* === 1. شاشة تسجيل الدخول المحدثة === */
+        /* === 1. خلفية الكلام المتحرك وشعار CIA === */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.18;
+        }
+
+        .bg-watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 25vw;
+            font-weight: 900;
+            font-family: var(--font-code);
+            color: rgba(197, 160, 89, 0.03);
+            letter-spacing: 20px;
+            z-index: 0;
+            pointer-events: none;
+            user-select: none;
+            animation: pulseWatermark 8s infinite alternate ease-in-out;
+        }
+
+        @keyframes pulseWatermark {
+            0% { opacity: 0.02; transform: translate(-50%, -50%) scale(0.98); }
+            100% { opacity: 0.05; transform: translate(-50%, -50%) scale(1.02); }
+        }
+
+        /* === 2. شاشة الانتظار (الـ 5 ثواني) === */
+        #loader-screen {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(3, 6, 9, 0.95);
+            backdrop-filter: blur(15px);
+            z-index: 9999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--gold-light);
+            text-align: center;
+        }
+
+        .loader-spinner {
+            width: 80px;
+            height: 80px;
+            border: 3px solid rgba(197, 160, 89, 0.1);
+            border-top: 3px solid var(--accent-cyan);
+            border-bottom: 3px solid var(--gold-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+            box-shadow: 0 0 25px rgba(0, 210, 255, 0.2);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .progress-bar-container {
+            width: 300px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            margin-top: 15px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--gold-color), var(--accent-cyan));
+            transition: width 0.1s linear;
+        }
+
+        .loader-status-text {
+            font-family: var(--font-code);
+            font-size: 12px;
+            color: var(--accent-cyan);
+            margin-top: 10px;
+            letter-spacing: 1px;
+        }
+
+        /* === 3. شاشة تسجيل الدخول === */
         .login-card {
+            position: relative;
+            z-index: 10;
             background: var(--panel-bg);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
             border: 1px solid var(--border-color);
             border-radius: 16px;
             padding: 40px 35px;
             width: 100%;
             max-width: 440px;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(197, 160, 89, 0.1);
-            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(197, 160, 89, 0.1);
             overflow: hidden;
         }
 
@@ -93,7 +181,6 @@
             align-items: center;
             background: rgba(0, 0, 0, 0.6);
             box-shadow: 0 0 25px rgba(197, 160, 89, 0.3);
-            position: relative;
         }
 
         .logo-container img {
@@ -196,9 +283,11 @@
             font-family: var(--font-code);
         }
 
-        /* === 2. النظام الداخلي التكتيكي === */
+        /* === 4. النظام الداخلي التكتيكي === */
         #main-system {
             display: none;
+            position: relative;
+            z-index: 10;
             width: 100%;
             max-width: 1200px;
         }
@@ -408,7 +497,7 @@
             padding-bottom: 5px;
         }
 
-        /* بطاقات المطلوبين والبيانات */
+        /* بطاقات البيانات والمطلوبين */
         .data-card {
             border: 1px solid var(--border-color);
             background: var(--card-bg);
@@ -525,6 +614,20 @@
     </style>
 </head>
 <body>
+
+    <!-- Canvas الخلفية المتحركة -->
+    <canvas id="bg-canvas"></canvas>
+    <div class="bg-watermark">CIA</div>
+
+    <!-- شاشة الانتظار والمحاكاة لمدة 5 ثوانٍ -->
+    <div id="loader-screen">
+        <div class="loader-spinner"></div>
+        <h3 style="letter-spacing: 2px; font-weight:800;">DECRYPTING FEDERAL DATA TERMINAL</h3>
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="progress-fill"></div>
+        </div>
+        <div class="loader-status-text" id="loader-status">INITIALIZING ENCRYPTION PROTOCOLS...</div>
+    </div>
 
     <!-- 1. شاشة تسجيل الدخول -->
     <div class="login-card" id="login-screen">
@@ -737,7 +840,7 @@
         </div>
     </div>
 
-    <!-- 3. البرمجة والتكامل السحابي عبر Firebase Firestore (بدون أي تعديل على الآلية) -->
+    <!-- 3. المزامنة والربط السحابي مع Firebase Firestore -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
       import { 
@@ -778,7 +881,7 @@
       window.globalDatabase = defaultDatabase;
       window.currentUser = "";
 
-      // حفظ السحابة عبر الفايربيس
+      // حفظ البيانات أونلاين
       window.saveCloudData = async function() {
           try {
               await setDoc(doc(db, "ciaSystem", "mainData"), { payload: JSON.stringify(window.globalDatabase) });
@@ -789,7 +892,7 @@
           window.renderAllData();
       };
 
-      // المزامنة التلقائية واللحظية بين الأجهزة
+      // المزامنة التلقائية واللحظية بين كل المستخدمين
       onSnapshot(doc(db, "ciaSystem", "mainData"), (docSnap) => {
           if (docSnap.exists()) {
               const dataStr = docSnap.data().payload;
@@ -804,14 +907,81 @@
       });
     </script>
 
+    <!-- 4. المؤثرات الصوتية، خلفية Matrix، والتحكم بالفترات الزمنية -->
     <script>
-        function checkAutoLogin() {
-            const savedUser = localStorage.getItem("active_cia_user");
-            if (savedUser && globalDatabase.users[savedUser]) {
-                openMainSystem(savedUser);
+        /* === أ. نظام الصوتيات والمورس ببرمجة Audio Context === */
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        function playMorseBeep() {
+            try {
+                if (!audioCtx) audioCtx = new AudioCtx();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.value = 750 + Math.random() * 250; // تردد المورس
+                gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.06);
+            } catch (e) {}
+        }
+
+        // إطلاق نطق الترحيب الفدرالي عند الدخول
+        function playWelcomeSpeech(username) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const text = `Access Granted. Welcome Agent ${username}. CIA Federal Terminal is online.`;
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.9;
+                utterance.pitch = 0.95;
+                window.speechSynthesis.speak(utterance);
             }
         }
 
+        /* === ب. إعداد خلفية الكلام الشفاف المتحرك Matrix === */
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const chars = "CIA TOP SECRET CLASSIFIED FEDERAL TERMINAL 01010101928374 MUTLEQ KARLOS INTELLIGENCE";
+        const fontSize = 12;
+        const columns = Math.floor(window.innerWidth / fontSize) + 1;
+        const drops = Array(columns).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(3, 6, 9, 0.15)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = "rgba(0, 210, 255, 0.35)";
+            ctx.font = fontSize + "px 'JetBrains Mono'";
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 40);
+
+        /* === ج. تسجيل الدخول والانتظار الـ 5 ثواني === */
         function login() {
             const user = document.getElementById("login-username").value.trim();
             const pass = document.getElementById("login-password").value.trim();
@@ -821,7 +991,44 @@
             if (globalDatabase.users[user] && globalDatabase.users[user].password === pass && globalDatabase.users[user].pin === pin) {
                 errorMsg.style.display = "none";
                 localStorage.setItem("active_cia_user", user);
-                openMainSystem(user);
+
+                // إظهار شاشة الانتظار
+                const loader = document.getElementById("loader-screen");
+                const fill = document.getElementById("progress-fill");
+                const statusTxt = document.getElementById("loader-status");
+                
+                loader.style.display = "flex";
+                fill.style.width = "0%";
+
+                const statuses = [
+                    "VERIFYING CLEARANCE LEVEL...",
+                    "AUTHENTICATING BIOMETRICS...",
+                    "DECRYPTING DATABASE FILES...",
+                    "CONNECTING TO SATELLITE NETWORK...",
+                    "ACCESS GRANTED - LOADING SYSTEM..."
+                ];
+
+                let progress = 0;
+                let morseInterval = setInterval(playMorseBeep, 130);
+
+                let interval = setInterval(() => {
+                    progress += 2; // 100% خلال 5 ثوانٍ (50 خطوة كل 100ms)
+                    fill.style.width = progress + "%";
+
+                    let statusIdx = Math.floor((progress / 100) * statuses.length);
+                    if (statusIdx < statuses.length) {
+                        statusTxt.innerText = statuses[statusIdx];
+                    }
+
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        clearInterval(morseInterval);
+                        loader.style.display = "none";
+                        openMainSystem(user);
+                        playWelcomeSpeech(user);
+                    }
+                }, 100);
+
             } else {
                 errorMsg.style.display = "block";
             }
