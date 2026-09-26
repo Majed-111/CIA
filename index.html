@@ -73,9 +73,9 @@
             0% { opacity: 0.02; transform: translate(-50%, -50%) scale(0.98); }
             100% { opacity: 0.05; transform: translate(-50%, -50%) scale(1.02); }
         }
-        /* شاشة التحميل والتحقيق (5 ثوانٍ) */
+        /* شاشة التحميل والتحقيق البداية (تظهر فور فتح الرابط) */
         #loader-screen {
-            display: none;
+            display: flex; /* تظهر فوراً */
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(3, 6, 9, 0.95);
@@ -124,8 +124,9 @@
             margin-top: 10px;
             letter-spacing: 1px;
         }
-        /* شاشة تسجيل الدخول */
+        /* شاشة تسجيل الدخول مخفية في البداية حتى ينتهي التحميل */
         .login-card {
+            display: none;
             position: relative;
             z-index: 10;
             background: var(--panel-bg);
@@ -213,11 +214,6 @@
         .input-group input:focus, .input-group textarea:focus {
             border-color: var(--accent-cyan);
             box-shadow: 0 0 12px var(--border-glow);
-        }
-        .search-box {
-            margin-bottom: 15px;
-            border-color: var(--gold-color) !important;
-            background: var(--input-bg) !important;
         }
         .btn-login {
             width: 100%;
@@ -577,7 +573,7 @@
     <canvas id="bg-canvas"></canvas>
     <div class="bg-watermark">CIA</div>
 
-    <!-- 2. شاشة الانتظار والفك التشفيري للتحقيقات (5 ثوانٍ) -->
+    <!-- 2. شاشة الانتظار والفك التشفيري للتحقيقات (تفتح فوراً أول ما يفتح الرابط) -->
     <div id="loader-screen">
         <div class="loader-spinner"></div>
         <h3 style="letter-spacing: 2px; font-weight:800;">INVESTIGATION & DECRYPTION PROTOCOL</h3>
@@ -587,7 +583,7 @@
         <div class="loader-status-text" id="loader-status">CONNECTING TO CIA FEDERAL DATABASE...</div>
     </div>
 
-    <!-- 3. شاشة تسجيل الدخول الرئيسي -->
+    <!-- 3. شاشة تسجيل الدخول الرئيسي (تظهر بعد الـ 5 ثواني) -->
     <div class="login-card" id="login-screen">
         <div class="subtitle-top">CIA • FEDERAL DATA TERMINAL</div>
         
@@ -618,7 +614,6 @@
 
     <!-- 4. النظام الداخلي التكتيكي -->
     <div id="main-system">
-        
         <!-- الهيدر العلوي -->
         <div class="header-system">
             <div>
@@ -629,7 +624,6 @@
                 </small>
             </div>
             <div class="header-actions">
-                <!-- زر التحكم الخاص بالـ DIRECTOR يظهر أعلى اليمين بجانب تسجيل الخروج -->
                 <button id="btn-leader-control" class="btn-control-panel" style="display: none;" onclick="openSection('leaderControlSection')">👑 نظام التحكم</button>
                 <button class="btn-logout" onclick="logout()">تسجيل الخروج</button>
             </div>
@@ -660,7 +654,6 @@
                     <small>ملفات الاستخبارات</small>
                     <span class="open-lbl">OPEN FOLDER →</span>
                 </div>
-                <!-- مجلد فك التشفير الجديد الذي تم نقله بدلاً من مجلد القضايا والعقوبات -->
                 <div class="folder-card" onclick="openSection('decryptSection')">
                     <b>DECRYPTION 🔓</b>
                     <small>فك التشفير والشفرات</small>
@@ -775,7 +768,7 @@
             <div id="gangs-list"></div>
         </div>
 
-        <!-- 5. المجلد الجديد الخاص بـ فك التشفير الشفري -->
+        <!-- 5. المجلد الخاص بـ فك التشفير الشفري -->
         <div class="workspace-panel" id="decryptSection">
             <button class="btn-back" onclick="showHome()">← العودة للرئيسية</button>
             <h3 style="color:var(--gold-light); margin-bottom:15px;">🔓 وحدة التشفير وفك الشفرات الفدرالية</h3>
@@ -815,7 +808,6 @@
                 <tbody id="users-table-body"></tbody>
             </table>
         </div>
-
     </div>
 
     <!-- المزامنة والربط السحابي مع Firebase Firestore -->
@@ -881,9 +873,8 @@
       });
     </script>
 
-    <!-- المؤثرات الصوتية الشفرية والشاشات والتنقل -->
+    <!-- المؤثرات الصوتية الشفرية والتنفيذ عند التحميل المباشر -->
     <script>
-        /* نظام الصوتيات ومحاكاة نغمة الهاكر وتشفير الهواتف/المورس */
         const AudioCtx = window.AudioContext || window.webkitAudioContext;
         let audioCtx = null;
 
@@ -893,7 +884,7 @@
                 if (audioCtx.state === 'suspended') audioCtx.resume();
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
-                osc.type = 'sawtooth'; // صوت إلكتروني يشبه الاختراق والفك التشفيري
+                osc.type = 'sawtooth';
                 osc.frequency.value = 300 + Math.random() * 900;
                 gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
                 osc.connect(gain);
@@ -903,7 +894,6 @@
             } catch (e) {}
         }
 
-        /* النطق المباشر عند الدخول بدقة: welcome to CIA بدون دوت */
         function playWelcomeSpeech() {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
@@ -916,7 +906,7 @@
             }
         }
 
-        /* خلفية التشفير المتحركة السي آي إيه والـ Ciphers */
+        /* خلفية التشفير المتحركة CIA */
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         function resizeCanvas() {
@@ -936,6 +926,7 @@
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = "rgba(0, 210, 255, 0.35)";
             ctx.font = fontSize + "px 'JetBrains Mono'";
+
             for (let i = 0; i < drops.length; i++) {
                 const text = chars.charAt(Math.floor(Math.random() * chars.length));
                 ctx.fillText(text, i * fontSize, drops[i] * fontSize);
@@ -947,7 +938,42 @@
         }
         setInterval(drawMatrix, 40);
 
-        /* تسجيل الدخول + مدة 5 ثواني مع صوت الهكر والشفرة */
+        /* تشغيل التحميل 5 ثوانٍ فور فتح الرابط مع الصوت والمؤثرات ثم إظهار تسجيل الدخول */
+        window.addEventListener("DOMContentLoaded", () => {
+            const loader = document.getElementById("loader-screen");
+            const fill = document.getElementById("progress-fill");
+            const statusTxt = document.getElementById("loader-status");
+            
+            fill.style.width = "0%";
+            const statuses = [
+                "DECRYPTING SECURITY CIPHERS...",
+                "BYPASSING FEDERAL FIREWALL...",
+                "ANALYZING INVESTIGATION DATA...",
+                "CONNECTING TO CIA SATELLITES...",
+                "CIPHER BROKEN - ACCESS GRANTED!"
+            ];
+            let progress = 0;
+            let soundInterval = setInterval(playHackerBeep, 80);
+            
+            let interval = setInterval(() => {
+                progress += 2; // 100% خلال 5 ثوانٍ
+                fill.style.width = progress + "%";
+                
+                let statusIdx = Math.floor((progress / 100) * statuses.length);
+                if (statusIdx < statuses.length) {
+                    statusTxt.innerText = statuses[statusIdx];
+                }
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    clearInterval(soundInterval);
+                    loader.style.display = "none";
+                    document.getElementById("login-screen").style.display = "block"; // إظهار كرت تسجيل الدخول بعد التحميل
+                    playWelcomeSpeech();
+                }
+            }, 100);
+        });
+
+        /* التحقق عند ضغط زر تسجيل الدخول */
         function login() {
             const user = document.getElementById("login-username").value.trim();
             const pass = document.getElementById("login-password").value.trim();
@@ -956,42 +982,7 @@
 
             if (globalDatabase.users[user] && globalDatabase.users[user].password === pass && globalDatabase.users[user].pin === pin) {
                 errorMsg.style.display = "none";
-                
-                const loader = document.getElementById("loader-screen");
-                const fill = document.getElementById("progress-fill");
-                const statusTxt = document.getElementById("loader-status");
-                
-                loader.style.display = "flex";
-                fill.style.width = "0%";
-
-                const statuses = [
-                    "DECRYPTING SECURITY CIPHERS...",
-                    "BYPASSING FEDERAL FIREWALL...",
-                    "ANALYZING INVESTIGATION DATA...",
-                    "CONNECTING TO CIA SATELLITES...",
-                    "CIPHER BROKEN - ACCESS GRANTED!"
-                ];
-
-                let progress = 0;
-                let soundInterval = setInterval(playHackerBeep, 80); // أصوات شفرة هكر متسارعة
-
-                let interval = setInterval(() => {
-                    progress += 2; // 100% خلال 5 ثوانٍ تماماً (50 خطوة كل 100 ملي ثانية)
-                    fill.style.width = progress + "%";
-                    
-                    let statusIdx = Math.floor((progress / 100) * statuses.length);
-                    if (statusIdx < statuses.length) {
-                        statusTxt.innerText = statuses[statusIdx];
-                    }
-
-                    if (progress >= 100) {
-                        clearInterval(interval);
-                        clearInterval(soundInterval);
-                        loader.style.display = "none";
-                        openMainSystem(user);
-                        playWelcomeSpeech();
-                    }
-                }, 100);
+                openMainSystem(user);
             } else {
                 errorMsg.style.display = "block";
             }
@@ -1006,10 +997,8 @@
             const userObj = globalDatabase.users[user];
             const roleDisplay = document.getElementById("current-role-display");
             const btnLeader = document.getElementById("btn-leader-control");
-
             roleDisplay.innerText = userObj.role || "CID Member";
 
-            // إظهار نظام التحكم للدايركتور فقط فوق يمين
             if (userObj.role === "DIRECTOR") {
                 roleDisplay.className = "badge badge-leader";
                 btnLeader.style.display = "inline-block";
@@ -1017,7 +1006,6 @@
                 roleDisplay.className = "badge";
                 btnLeader.style.display = "none";
             }
-
             renderAllData();
             showHome();
         }
@@ -1296,7 +1284,6 @@
             const pass = document.getElementById("new-password").value.trim();
             const pin = document.getElementById("new-pin").value.trim();
             const role = document.getElementById("new-role").value;
-
             if (!user || !id || !pass || !pin) return alert("يرجى تعبئة جميع الحقول!");
             
             globalDatabase.users[user] = { password: pass, pin: pin, id: id, role: role };
